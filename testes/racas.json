@@ -1,0 +1,10 @@
+{
+    "Humano": {"atributo_chave": "Empatia", "talento_ascendente": "Adaptive", "profissoes_tipicas": ["Caçador", "Druida", "Mago", "Rider", "Guerreiro", "Ladino", "Mascate", "Bardo"]},
+    "Meio-Elfo": {"atributo_chave": "Inteligência", "talento_ascendente": "Poder mental", "profissoes_tipicas": ["Druida", "Mago", "Ladino"]},
+    "Anão": {"atributo_chave": "Força", "talento_ascendente": "Bravura Indômita", "profissoes_tipicas": ["Guerreiro", "Mascate", "Bardo"]},
+    "Halfling": {"atributo_chave": "Empatia", "talento_ascendente": "Difícil de Acertar", "profissoes_tipicas": ["Bardo", "Mascate", "Ladino"]},
+    "Lupino": {"atributo_chave": "Agilidade", "talento_ascendente": "Instinto de Caça", "profissoes_tipicas": ["Caçador", "Druida", "Guerreiro"]},
+    "Orc": {"atributo_chave": "Força", "talento_ascendente": "Imbatível", "profissoes_tipicas": ["Caçador", "Guerreiro", "Ladino"]},
+    "Goblin": {"atributo_chave": "Agilidade", "talento_ascendente": "Noturno", "profissoes_tipicas": ["Caçador", "Rider", "Ladino"]},
+    "Elfo": {"atributo_chave": "Agilidade", "talento_ascendente": "Paz Interior", "profissoes_tipicas": ["Caçador", "Druida", "Bardo"]}
+}
