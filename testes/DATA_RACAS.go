@@ -11,10 +11,11 @@ type Raca struct {
 	AtributoChave     string   `json:"atributo_chave"`
 	TalentoAscendente string   `json:"talento_ascendente"`
 	ProfissoesTipicas []string `json:"profissoes_tipicas"`
+	Idades            Idades   `json:"idades"`
 }
 
-// IdadeRaca representa as faixas etarias para uma raca
-type IdadeRaca struct {
+// Idades representa as faixas etarias para uma raca
+type Idades struct {
 	Jovem  *[2]int `json:"Jovem"`
 	Adulto [2]int  `json:"Adulto"`
 	Idoso  *[2]int `json:"Idoso"`
@@ -22,13 +23,12 @@ type IdadeRaca struct {
 
 // PersonagemRacas armazena todas as racas e suas infos
 type PersonagemRacas struct {
-	Racas      []string
-	RacasInfo  map[string]Raca
-	IdadeRacas map[string]IdadeRaca
+	Racas     []string
+	RacasInfo map[string]Raca
 }
 
-// Func para carregar dados das racas do arquivo JSON
-func carregarRacas(filename string) (map[string]Raca, error) {
+// Função para carregar dados de raças e idades de um arquivo JSON unificado
+func carregarRacasEIdades(filename string) (map[string]Raca, error) {
 	var racas map[string]Raca
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -38,27 +38,11 @@ func carregarRacas(filename string) (map[string]Raca, error) {
 	return racas, err
 }
 
-// Func para carregar dados das idades do arquivo JSON
-func carregarIdades(filename string) (map[string]IdadeRaca, error) {
-	var idades map[string]IdadeRaca
-	data, err := ioutil.ReadFile(filename)
+// NewPersonagemRacas inicializa PersonagemRacas com valores carregados do arquivo JSON unificado.
+func NewPersonagemRacas(classes []string, racasFile string) (*PersonagemRacas, error) {
+	racas, err := carregarRacasEIdades(racasFile)
 	if err != nil {
-		return idades, err
-	}
-	err = json.Unmarshal(data, &idades)
-	return idades, err
-}
-
-// NewPersonagemRacas inicializa PersonagemRacas com valores carregados dos arquivos JSON.
-func NewPersonagemRacas(classes []string, racasFile, idadesFile string) (*PersonagemRacas, error) {
-	racas, err := carregarRacas(racasFile)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar raças: %v", err)
-	}
-
-	idades, err := carregarIdades(idadesFile)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar idades: %v", err)
+		return nil, fmt.Errorf("erro ao carregar raças e idades: %v", err)
 	}
 
 	racasNomes := make([]string, 0, len(racas))
@@ -67,8 +51,47 @@ func NewPersonagemRacas(classes []string, racasFile, idadesFile string) (*Person
 	}
 
 	return &PersonagemRacas{
-		Racas:      racasNomes,
-		RacasInfo:  racas,
-		IdadeRacas: idades,
+		Racas:     racasNomes,
+		RacasInfo: racas,
 	}, nil
 }
+
+// Função auxiliar para imprimir as informações de uma raça de forma legível
+func imprimirRaca(raca Raca) {
+	fmt.Printf("Atributo Chave: %s\n", raca.AtributoChave)
+	fmt.Printf("Talento Ascendente: %s\n", raca.TalentoAscendente)
+	fmt.Printf("Profissões Típicas: %v\n", raca.ProfissoesTipicas)
+	fmt.Print("Idades: ")
+	if raca.Idades.Jovem != nil {
+		fmt.Printf("Jovem: [%d, %d] ", raca.Idades.Jovem[0], raca.Idades.Jovem[1])
+	}
+	fmt.Printf("Adulto: [%d, %d] ", raca.Idades.Adulto[0], raca.Idades.Adulto[1])
+	if raca.Idades.Idoso != nil {
+		fmt.Printf("Idoso: [%d, %d] ", raca.Idades.Idoso[0], raca.Idades.Idoso[1])
+	}
+	fmt.Println()
+}
+
+// Funcao main para testar oq foi feito nesse modulo
+/*
+func main() {
+	// Codigo para testar
+	classes := []string{"Caçador", "Druida", "Mago", "Rider", "Guerreiro", "Ladino", "Mascate", "Bardo"}
+	personagemRacas, err := NewPersonagemRacas(classes, "racas_e_idades.json")
+	if err != nil {
+		fmt.Println("Erro:", err)
+		return
+	}
+
+	fmt.Println("Racas:")
+	for _, raca := range personagemRacas.Racas {
+		fmt.Println(raca)
+	}
+
+	fmt.Println("\nRacas Info:")
+	for nome, info := range personagemRacas.RacasInfo {
+		fmt.Printf("%s: \n", nome)
+		imprimirRaca(info)
+	}
+}
+*/
