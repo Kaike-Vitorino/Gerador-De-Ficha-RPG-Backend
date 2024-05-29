@@ -4,7 +4,7 @@ import (
 	"image"
 )
 
-// Coordinates holds the coordinates for various elements on the character sheet.
+// Coordinates tem as coordenadas do elementos da ficha do sistemaRPG
 type Coordinates struct {
 	SimpleCoordinates      map[string]image.Point
 	ArmorCoordinates       []image.Point
@@ -14,21 +14,21 @@ type Coordinates struct {
 	KeyMap                 map[string]string
 }
 
-// NewCoordinates initializes the Coordinates struct with the appropriate data.
+// NewCoordinates inicializa a estrutura Coordinates com os valores certos
 func NewCoordinates() *Coordinates {
 	return &Coordinates{
 		SimpleCoordinates: map[string]image.Point{
 			"raca_cord":   {210, 195},
 			"classe_cord": {1560, 195},
-			//===== Atributos =====#
+			//===== Atributos =====//
 			"Força_cord":        {275, 515},
 			"Agilidade_cord":    {275, 615},
 			"Inteligência_cord": {275, 715},
 			"Empatia_cord":      {275, 815},
-			//====== Talento =======#
+			//====== Talento =======//
 			"talento_cord":       {1342, 1135},
 			"nivel_talento_cord": {1860, 1135},
-			//====== Pericias =======#
+			//====== Pericias =======//
 			"Potencia_cord":      {535, 1632},
 			"Resiliência_cord":   {535, 1702},
 			"Luta_cord":          {535, 1772},
@@ -45,12 +45,12 @@ func NewCoordinates() *Coordinates {
 			"Atuação_cord":       {535, 2542},
 			"Cura_cord":          {535, 2612},
 			"Adestramento_cord":  {535, 2682},
-			//======================#
+			//======================//
 			"idade_cord":          {810, 996},
 			"faixa_etaria_cord":   {810, 1045},
 			"arma_escolhida_cord": {700, 2120},
 			"info_armas_cord":     {1200, 2120},
-			//======================#
+			//======================//
 		},
 		ArmorCoordinates: []image.Point{
 			{790, 1780},

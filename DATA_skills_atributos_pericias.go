@@ -1,8 +1,6 @@
 package main
 
-import "fmt"
-
-// Atributos represents the attributes of a character.
+// Atributos representa os atributos de um personagem
 type Atributos struct {
 	Forca        []int
 	Agilidade    []int
@@ -10,20 +8,20 @@ type Atributos struct {
 	Empatia      []int
 }
 
-// Pericias represents the skills and their corresponding attributes.
+// Pericias representa as habilidades/skills e seus atributos correspondentes
 type Pericias map[string]string
 
-// Talentos represents the talents and the classes that can have them.
+// Talentos representa os talentos e as classes que podem ter eles
 type Talentos map[string][]string
 
-// PersonagemStatus represents the character's status, including attributes, skills, and talents.
+// PersonagemStatus representa os stats geral do personagem, ou seja, atributos, habilidades e talentos
 type PersonagemStatus struct {
 	Atributos Atributos
 	Pericias  Pericias
 	Talentos  Talentos
 }
 
-// NewPersonagemStatus initializes the PersonagemStatus with default values.
+// NewPersonagemStatus Inicializa os PersonagemStatus com valores padroes
 func NewPersonagemStatus() *PersonagemStatus {
 	return &PersonagemStatus{
 		Atributos: Atributos{
@@ -85,9 +83,4 @@ func NewPersonagemStatus() *PersonagemStatus {
 			},
 		},
 	}
-}
-
-func main() {
-	status := NewPersonagemStatus()
-	fmt.Println(status)
 }
