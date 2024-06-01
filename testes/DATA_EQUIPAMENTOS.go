@@ -38,8 +38,8 @@ type Equipamentos struct {
 	ListaArmasFinal          map[string]Arma     `json:"-"`
 }
 
-// NewEquipamentos inicializa a struct Equipamentos com os dados do json
-func NewEquipamentos() (*Equipamentos, error) {
+// CarregarEquipamentos carrega os equipamentos do JSON
+func CarregarEquipamentos() (*Equipamentos, error) {
 	equipamentos := &Equipamentos{}
 
 	err := readJSON("data/itensComercio.json", &equipamentos.ItensComercio)

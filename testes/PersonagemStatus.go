@@ -4,32 +4,31 @@ import (
 	"fmt"
 )
 
+// PersonagemStatus representa os stats geral do personagem, ou seja, atributos, habilidades e talentos
 type PersonagemStatus struct {
 	Atributos Atributos
 	Pericias  Pericias
 	Talentos  Talentos
 }
 
-// NewPersonagemStatus inicializa PersonagemStatus com valores carregados dos arquivos JSON
-func NewPersonagemStatus() (*PersonagemStatus, error) {
-	atributos, err := carregarAtributos("")
+// Função para carregar dados de atributos, perícias e talentos de arquivos JSON
+func NewPersonagemStatus(atributosFile, periciasFile, talentosFile string) (*PersonagemStatus, error) {
+	status := &PersonagemStatus{}
+
+	err := readJSON(atributosFile, &status.Atributos)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar atributos: %v", err)
 	}
 
-	pericias, err := carregarPericias("")
+	err = readJSON(periciasFile, &status.Pericias)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar perícias: %v", err)
 	}
 
-	talentos, err := carregarTalentos("")
+	err = readJSON(talentosFile, &status.Talentos)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar talentos: %v", err)
 	}
 
-	return &PersonagemStatus{
-		Atributos: atributos,
-		Pericias:  pericias,
-		Talentos:  talentos,
-	}, nil
+	return status, nil
 }

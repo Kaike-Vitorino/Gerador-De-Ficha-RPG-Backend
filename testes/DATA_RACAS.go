@@ -11,14 +11,11 @@ type Raca struct {
 	AtributoChave     string   `json:"atributo_chave"`
 	TalentoAscendente string   `json:"talento_ascendente"`
 	ProfissoesTipicas []string `json:"profissoes_tipicas"`
-	Idades            Idades   `json:"idades"`
-}
-
-// Idades representa as faixas etarias para uma raca
-type Idades struct {
-	Jovem  *[2]int `json:"Jovem"`
-	Adulto [2]int  `json:"Adulto"`
-	Idoso  *[2]int `json:"Idoso"`
+	Idades            struct {
+		Jovem  *[2]int `json:"jovem"`
+		Adulto [2]int  `json:"adulto"`
+		Idoso  *[2]int `json:"idoso"`
+	} `json:"idades"`
 }
 
 // PersonagemRacas armazena todas as racas e suas infos
@@ -27,7 +24,7 @@ type PersonagemRacas struct {
 	RacasInfo map[string]Raca
 }
 
-// Função para carregar dados de raças e idades de um arquivo JSON unificado
+// Função para carregar dados das raças de um arquivo JSON
 func carregarRacas(filename string) (map[string]Raca, error) {
 	var racas map[string]Raca
 	data, err := ioutil.ReadFile(filename)
@@ -39,7 +36,7 @@ func carregarRacas(filename string) (map[string]Raca, error) {
 }
 
 // NewPersonagemRacas inicializa PersonagemRacas com valores carregados do arquivo JSON unificado.
-func NewPersonagemRacas(classes []string, filename string) (*PersonagemRacas, error) {
+func NewPersonagemRacas(filename string) (*PersonagemRacas, error) {
 	if filename == "" {
 		filename = "data/racas.json"
 	}

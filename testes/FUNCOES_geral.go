@@ -1,17 +1,44 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
 
-// Estruturas e variáveis globais
-var (
-	raca                     string
-	artefatoMusicalEscolhido string
-	armaEscolhida            string
-	equipamentos             []string
-)
+// Personagem representa todas as informações de um personagem
+type Personagem struct {
+	Raca                     string
+	Classe                   string
+	Idade                    int
+	FaixaEtaria              string
+	Atributos                map[string]int
+	ArtefatoMusicalEscolhido string
+	ArmaEscolhida            string
+	Equipamentos             []string
+	Pericias                 map[string]string
+	Talentos                 map[string][]string
+}
+
+// Função para gerar um personagem
+func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, equipamentos *Equipamentos) (*Personagem, error) {
+	raca, racaInfo := gerarRaca(racas)
+	classe := gerarClasse(raca, racas)
+	atributosChave := obterAtributosChave(classe, racaInfo, classes.ClasseInfo)
+	idade, faixaEtaria := calcularIdade(raca, racas)
+	atributos := escolherAtributos(faixaEtaria, atributosChave)
+
+	// Aqui você pode adicionar a lógica para selecionar equipamentos e outros detalhes
+
+	return &Personagem{
+		Raca:        raca,
+		Classe:      classe,
+		Atributos:   atributos,
+		Idade:       idade,
+		FaixaEtaria: faixaEtaria,
+		// Preencha os demais campos conforme necessário
+	}, nil
+}
 
 // Função para gerar raça aleatória
 func gerarRaca(racas *PersonagemRacas) (string, Raca) {
@@ -23,7 +50,6 @@ func gerarRaca(racas *PersonagemRacas) (string, Raca) {
 
 // Função para gerar classe
 func gerarClasse(raca string, racas *PersonagemRacas) string {
-	rand.Seed(time.Now().UnixNano())
 	profissoes := racas.RacasInfo[raca].ProfissoesTipicas
 	return profissoes[rand.Intn(len(profissoes))]
 }
@@ -45,8 +71,6 @@ func obterAtributosChave(classe string, racaInfo Raca, classes map[string]Classe
 
 // Função para calcular idade
 func calcularIdade(raca string, racas *PersonagemRacas) (int, string) {
-	rand.Seed(time.Now().UnixNano())
-
 	if raca == "Elfo" {
 		return rand.Intn(975) + 26, "Adulto"
 	}
@@ -137,4 +161,39 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// Função main para testar a criação do personagem
+func main() {
+	racas, err := NewPersonagemRacas("")
+	if err != nil {
+		fmt.Println("Erro ao carregar raças:", err)
+		return
+	}
+
+	classes, err := NewPersonagemClasses("")
+	if err != nil {
+		fmt.Println("Erro ao carregar classes:", err)
+		return
+	}
+
+	status, err := NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+	if err != nil {
+		fmt.Println("Erro ao carregar status:", err)
+		return
+	}
+
+	equipamentos, err := CarregarEquipamentos()
+	if err != nil {
+		fmt.Println("Erro ao carregar equipamentos:", err)
+		return
+	}
+
+	personagem, err := gerarPersonagem(racas, classes, status, equipamentos)
+	if err != nil {
+		fmt.Println("Erro ao gerar personagem:", err)
+		return
+	}
+
+	fmt.Printf("Personagem: %+v\n", personagem)
 }
