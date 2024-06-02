@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 )
 
 // Classe representa as informacoes de uma classe
@@ -70,4 +71,10 @@ func NewPersonagemClasses(filename string) (*PersonagemClasses, error) {
 		ClasseInfo:      classes,
 		TalentosClasses: talentosClasses,
 	}, nil
+}
+
+// Função para gerar classe
+func gerarClasse(raca string, racas *PersonagemRacas) string {
+	profissoes := racas.RacasInfo[raca].ProfissoesTipicas
+	return profissoes[rand.Intn(len(profissoes))]
 }
