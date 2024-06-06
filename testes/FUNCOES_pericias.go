@@ -1,27 +1,46 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
 
-// DistribuiPontosPericia distribui os pontos de perícia com base na faixa etária e classe do personagem
-func DistribuiPontosPericia(faixaEtaria, classe string, classes *PersonagemClasses) map[string]int {
-	// Definindo pontos disponíveis com base na faixa etária
-	pontosDisponiveis := map[string]int{
+// DistribuidorDePericias gerencia a distribuição de pontos de perícia.
+type DistribuidorDePericias struct {
+	pericias map[string][]string
+}
+
+// NovaDistribuidorDePericias cria uma nova instância de DistribuidorDePericias.
+func NovaDistribuidorDePericias(pericias map[string][]string) *DistribuidorDePericias {
+	return &DistribuidorDePericias{pericias: pericias}
+}
+
+// Distribuir distribui os pontos de perícia com base na faixa etária e na classe.
+func (d *DistribuidorDePericias) Distribuir(faixaEtaria, classe string) map[string]int {
+	pontosPorFaixaEtaria := map[string]int{
 		"Jovem":  8,
 		"Adulto": 10,
 		"Idoso":  12,
-	}[faixaEtaria]
+	}
 
-	// Obter as perícias permitidas para a classe
-	periciasPermitidas := classes.ClasseInfo[classe].Pericias
+	pontosDisponiveis, ok := pontosPorFaixaEtaria[faixaEtaria]
+	if !ok {
+		fmt.Printf("Faixa etária %s inválida\n", faixaEtaria)
+		return nil
+	}
+
+	periciasPermitidas, ok := d.pericias[classe]
+	if !ok {
+		fmt.Printf("Classe %s não encontrada\n", classe)
+		return nil
+	}
+
 	periciasDistribuidas := make(map[string]int)
 	for _, pericia := range periciasPermitidas {
 		periciasDistribuidas[pericia] = 0
 	}
 
-	// Distribuir os pontos aleatoriamente
 	rand.Seed(time.Now().UnixNano())
 	for pontosDisponiveis > 0 {
 		pericia := periciasPermitidas[rand.Intn(len(periciasPermitidas))]
