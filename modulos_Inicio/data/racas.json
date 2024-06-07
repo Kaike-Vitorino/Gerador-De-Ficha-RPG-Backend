@@ -6,13 +6,13 @@
         "idades": {"Jovem": [16, 25], "Adulto": [26, 50], "Idoso": [51, 80]}
     },
     "Meio-Elfo": {
-        "atributo_chave": "Inteligência",
+        "atributo_chave": "Inteligencia",
         "talento_ascendente": "Poder mental",
         "profissoes_tipicas": ["Druida", "Mago", "Ladino"],
         "idades": {"Jovem": [16, 30], "Adulto": [31, 100], "Idoso": [101, 180]}
     },
     "Anão": {
-        "atributo_chave": "Força",
+        "atributo_chave": "Forca",
         "talento_ascendente": "Bravura Indômita",
         "profissoes_tipicas": ["Guerreiro", "Mascate", "Bardo"],
         "idades": {"Jovem": [20, 40], "Adulto": [41, 80], "Idoso": [81, 121]}
@@ -30,7 +30,7 @@
         "idades": {"Jovem": [13, 20], "Adulto": [21, 40], "Idoso": [41, 65]}
     },
     "Orc": {
-        "atributo_chave": "Força",
+        "atributo_chave": "Forca",
         "talento_ascendente": "Imbatível",
         "profissoes_tipicas": ["Caçador", "Guerreiro", "Ladino"],
         "idades": {"Jovem": [13, 20], "Adulto": [21, 45], "Idoso": [46, 70]}

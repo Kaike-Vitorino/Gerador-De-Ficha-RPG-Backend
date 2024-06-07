@@ -15,7 +15,7 @@ type Classe struct {
 	DadosRecurso  map[string]string `json:"dados_recurso"`
 }
 
-// EquipamentoClasse representa os equipamentos de uma classe
+// EquipamentoClasse representa os equipamentos disponíveis para cada classe
 type EquipamentoClasse struct {
 	Arma            []string `json:"arma"`
 	Armadura        *string  `json:"armadura"`
@@ -32,7 +32,7 @@ type PersonagemClasses struct {
 }
 
 // Função para carregar dados de classes de um arquivo JSON
-func carregarClasses(filename string) (map[string]Classe, map[string][]string, error) {
+func CarregarClasses(filename string) (map[string]Classe, map[string][]string, error) {
 	var data struct {
 		Classes         map[string]Classe   `json:"Classes"`
 		TalentosClasses map[string][]string `json:"TalentosClasses"`
@@ -56,7 +56,7 @@ func NewPersonagemClasses(filename string) (*PersonagemClasses, error) {
 		filename = "data/classes.json"
 	}
 
-	classes, talentosClasses, err := carregarClasses(filename)
+	classes, talentosClasses, err := CarregarClasses(filename)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar classes: %v", err)
 	}

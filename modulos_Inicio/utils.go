@@ -49,3 +49,38 @@ func remove(slice []string, s string) []string {
 	}
 	return slice
 }
+
+// Função para verificar a igualdade de dois slices
+func equalSlices(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// Função utilitária para selecionar um item aleatório de uma lista
+func randomChoice(options []string) string {
+	rand.Seed(time.Now().UnixNano())
+	return options[rand.Intn(len(options))]
+}
+
+// randomChoiceSlice retorna um item aleatório de um slice de strings
+func randomChoiceSlice(options []string) string {
+	rand.Seed(time.Now().UnixNano())
+	return options[rand.Intn(len(options))]
+}
+
+// randomChoiceFromMap retorna uma chave aleatória de um mapa
+func randomChoiceFromMap(m map[string]Arma) string {
+	rand.Seed(time.Now().UnixNano())
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys[rand.Intn(len(keys))]
+}

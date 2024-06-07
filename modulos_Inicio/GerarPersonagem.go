@@ -19,21 +19,31 @@ type Personagem struct {
 	Talentos                 map[string]Talento
 }
 
+//raca, racaInfo := "Elfo", racas.RacasInfo["Elfo"]
+//classe := "Caçador"
+//idade, faixaEtaria = 94, "Adulto"
+
 // Função para gerar um personagem
 func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, equipamentos *Equipamentos, talentos *Talentos) (*Personagem, error) {
 	raca, racaInfo := gerarRaca(racas)
 	classe := gerarClasse(raca, racas)
 	atributosChave := obterAtributosChave(classe, racaInfo, classes.ClasseInfo)
 	idade, faixaEtaria := calcularIdade(raca, racas)
-	atributos := escolherAtributos(faixaEtaria, atributosChave)
 
-	// Distribuir perícias
+	// Carregar atributos do JSON
+	atributosData, err := carregarAtributos("data/atributos.json")
+	if err != nil {
+		return nil, fmt.Errorf("erro ao carregar atributos: %v", err)
+	}
+
+	atributos := escolherAtributos(faixaEtaria, atributosChave, atributosData)
 	pericias := DistribuirPericias(faixaEtaria, classe, status.Pericias, classes.ClasseInfo)
-
-	// Distribuir talentos
 	talentosDistribuidos := EscolherTalentos(classe, raca, faixaEtaria, racas.RacasInfo, classes.TalentosClasses, talentos.TalentosGerais)
 
-	// Aqui você pode adicionar a lógica para selecionar equipamentos e outros detalhes
+	equipamentosGerados, err := GerarArma(classe, classes.ClasseInfo, equipamentos)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao gerar equipamentos: %v", err)
+	}
 
 	return &Personagem{
 		Raca:           raca,
@@ -44,7 +54,7 @@ func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status 
 		FaixaEtaria:    faixaEtaria,
 		Pericias:       pericias,
 		Talentos:       talentosDistribuidos,
-		// Preencha os demais campos conforme necessário
+		Equipamentos:   equipamentosGerados,
 	}, nil
 }
 
@@ -85,8 +95,6 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Personagem: %+v\n", personagem)
-
 	// Impressão formatada do personagem
 	fmt.Printf("Personagem:\n")
 	fmt.Printf("  Raça: %s\n", personagem.Raca)
@@ -105,5 +113,9 @@ func main() {
 	fmt.Printf("  Talentos:\n")
 	for nome, talento := range personagem.Talentos {
 		fmt.Printf("    %s: Nível %d\n", nome, talento.Nivel)
+	}
+	fmt.Printf("  Equipamentos:\n")
+	for _, equipamento := range personagem.Equipamentos {
+		fmt.Printf("    %s\n", equipamento)
 	}
 }

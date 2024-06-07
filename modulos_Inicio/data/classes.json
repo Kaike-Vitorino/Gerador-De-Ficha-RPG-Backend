@@ -18,7 +18,7 @@
             }
         },
         "Druida": {
-            "atributo_chave": "Inteligência",
+            "atributo_chave": "Inteligencia",
             "pericias": ["Resiliência", "Sobrevivência", "Discernimento", "Cura", "Adestramento"],
             "equipamentos": {
                 "arma": ["Bastão", "Faca"],
@@ -34,7 +34,7 @@
             }
         },
         "Mago": {
-            "atributo_chave": "Inteligência",
+            "atributo_chave": "Inteligencia",
             "pericias": ["Artesanato", "Artimanha", "Tradição", "Discernimento", "Manipulação"],
             "equipamentos": {
                 "arma": ["Bastão", "Faca"],
@@ -67,7 +67,7 @@
             }
         },
         "Guerreiro": {
-            "atributo_chave": "Força",
+            "atributo_chave": "Forca",
             "pericias": ["Potência", "Resiliência", "Luta", "Movimentação"],
             "equipamentos": {
                 "arma": ["Faca", "Adaga", "Facão", "Espada Curta", "Espada Larga", "Espada Longa", "Cimitarra", "Machadinha", "Machado de Batalha", "Maça", "Maça Estrela", "Martelo de Guerra", "Mangual", "Porrete", "Lança Curta", "Tridente"],
