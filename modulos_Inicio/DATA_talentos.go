@@ -5,19 +5,21 @@ import (
 	"io/ioutil"
 )
 
-// Talentos representa os talentos e as classes que podem ter eles
-type Talentos map[string][]string
+// Talentos representa os talentos de um personagem
+type Talentos struct {
+	TalentosGerais map[string][]string `json:"TalentosGerais"`
+}
 
 // Função para carregar dados de talentos de um arquivo JSON
 func carregarTalentos(filename string) (Talentos, error) {
-	if filename == "" {
-		filename = "data/talentos.json"
-	}
 	var talentos Talentos
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return talentos, err
 	}
 	err = json.Unmarshal(data, &talentos)
-	return talentos, err
+	if err != nil {
+		return talentos, err
+	}
+	return talentos, nil
 }

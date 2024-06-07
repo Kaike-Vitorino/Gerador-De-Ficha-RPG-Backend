@@ -20,14 +20,18 @@ type Personagem struct {
 }
 
 // Função para gerar um personagem
-func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, equipamentos *Equipamentos, periciasDistribuidor *DistribuidorDePericias, talentosDistribuidor *DistribuidorDeTalentos) (*Personagem, error) {
+func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, equipamentos *Equipamentos, talentos *Talentos) (*Personagem, error) {
 	raca, racaInfo := gerarRaca(racas)
 	classe := gerarClasse(raca, racas)
 	atributosChave := obterAtributosChave(classe, racaInfo, classes.ClasseInfo)
 	idade, faixaEtaria := calcularIdade(raca, racas)
 	atributos := escolherAtributos(faixaEtaria, atributosChave)
-	pericias := periciasDistribuidor.Distribuir(faixaEtaria, classe)
-	talentos := talentosDistribuidor.EscolherTalentos(classe, raca, faixaEtaria)
+
+	// Distribuir perícias
+	pericias := DistribuirPericias(faixaEtaria, classe, status.Pericias, classes.ClasseInfo)
+
+	// Distribuir talentos
+	talentosDistribuidos := EscolherTalentos(classe, raca, faixaEtaria, racas.RacasInfo, classes.TalentosClasses, talentos.TalentosGerais)
 
 	// Aqui você pode adicionar a lógica para selecionar equipamentos e outros detalhes
 
@@ -39,7 +43,7 @@ func gerarPersonagem(racas *PersonagemRacas, classes *PersonagemClasses, status 
 		Idade:          idade,
 		FaixaEtaria:    faixaEtaria,
 		Pericias:       pericias,
-		Talentos:       talentos,
+		Talentos:       talentosDistribuidos,
 		// Preencha os demais campos conforme necessário
 	}, nil
 }
@@ -69,10 +73,13 @@ func main() {
 		return
 	}
 
-	periciasDistribuidor := NovaDistribuidorDePericias(status.Pericias)
-	talentosDistribuidor := NovaDistribuidorDeTalentos(classes.TalentosClasses, status.Talentos.TalentosGerais, racas.RacasInfo)
+	talentos, err := carregarTalentos("data/talentos.json")
+	if err != nil {
+		fmt.Println("Erro ao carregar talentos:", err)
+		return
+	}
 
-	personagem, err := gerarPersonagem(racas, classes, status, equipamentos, periciasDistribuidor, talentosDistribuidor)
+	personagem, err := gerarPersonagem(racas, classes, status, equipamentos, &talentos)
 	if err != nil {
 		fmt.Println("Erro ao gerar personagem:", err)
 		return

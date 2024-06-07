@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 // Função auxiliar para verificar se um slice contém um item específico
 func contemItem(slice []string, item string) bool {
@@ -20,13 +23,21 @@ func menorValor(a, b int) int {
 	return b
 }
 
-// randomSample returns a random sample of n elements from a slice.
-func randomSample(slice []string, n int) []string {
-	rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
-	if n > len(slice) {
-		n = len(slice)
+// randomSample retorna uma amostra aleatória dos elementos fornecidos.
+func randomSample(elements []string, n int) []string {
+	if n > len(elements) {
+		n = len(elements)
 	}
-	return slice[:n]
+	if n <= 0 {
+		return []string{}
+	}
+	rand.Seed(time.Now().UnixNano())
+	perm := rand.Perm(len(elements))
+	sample := make([]string, n)
+	for i := 0; i < n; i++ {
+		sample[i] = elements[perm[i]]
+	}
+	return sample
 }
 
 // remove removes an element from a slice.

@@ -6,18 +6,8 @@ import (
 	"time"
 )
 
-// DistribuidorDePericias gerencia a distribuição de pontos de perícia.
-type DistribuidorDePericias struct {
-	pericias map[string][]string
-}
-
-// NovaDistribuidorDePericias cria uma nova instância de DistribuidorDePericias.
-func NovaDistribuidorDePericias(pericias map[string][]string) *DistribuidorDePericias {
-	return &DistribuidorDePericias{pericias: pericias}
-}
-
-// Distribuir distribui os pontos de perícia com base na faixa etária e na classe.
-func (d *DistribuidorDePericias) Distribuir(faixaEtaria, classe string) map[string]int {
+// Função para distribuir os pontos de perícia com base na faixa etária e na classe.
+func DistribuirPericias(faixaEtaria, classe string, pericias map[string]string, classesInfo map[string]Classe) map[string]int {
 	pontosPorFaixaEtaria := map[string]int{
 		"Jovem":  8,
 		"Adulto": 10,
@@ -30,11 +20,14 @@ func (d *DistribuidorDePericias) Distribuir(faixaEtaria, classe string) map[stri
 		return nil
 	}
 
-	periciasPermitidas, ok := d.pericias[classe]
+	// Obter as perícias permitidas para a classe
+	classeInfo, ok := classesInfo[classe]
 	if !ok {
-		fmt.Printf("Classe %s não encontrada\n", classe)
+		fmt.Printf("Classe %s não encontrada ou sem perícias permitidas\n", classe)
 		return nil
 	}
+
+	periciasPermitidas := classeInfo.Pericias
 
 	periciasDistribuidas := make(map[string]int)
 	for _, pericia := range periciasPermitidas {
