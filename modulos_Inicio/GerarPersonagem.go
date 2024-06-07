@@ -86,4 +86,24 @@ func main() {
 	}
 
 	fmt.Printf("Personagem: %+v\n", personagem)
+
+	// Impressão formatada do personagem
+	fmt.Printf("Personagem:\n")
+	fmt.Printf("  Raça: %s\n", personagem.Raca)
+	fmt.Printf("  Classe: %s\n", personagem.Classe)
+	fmt.Printf("  Idade: %d\n", personagem.Idade)
+	fmt.Printf("  Faixa Etária: %s\n", personagem.FaixaEtaria)
+	fmt.Printf("  Atributos Chave: %v\n", personagem.AtributosChave)
+	fmt.Printf("  Atributos:\n")
+	for atributo, valor := range personagem.Atributos {
+		fmt.Printf("    %s: %d\n", atributo, valor)
+	}
+	fmt.Printf("  Perícias:\n")
+	for pericia, valor := range personagem.Pericias {
+		fmt.Printf("    %s: %d\n", pericia, valor)
+	}
+	fmt.Printf("  Talentos:\n")
+	for nome, talento := range personagem.Talentos {
+		fmt.Printf("    %s: Nível %d\n", nome, talento.Nivel)
+	}
 }

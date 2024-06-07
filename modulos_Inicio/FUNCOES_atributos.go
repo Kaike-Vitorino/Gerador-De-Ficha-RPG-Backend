@@ -53,6 +53,12 @@ func escolherAtributos(faixaEtaria string, atributosChave []string) map[string]i
 		pontosDisponiveis -= atributosRandomizados[atributo]
 	}
 
+	// Adicionando +1 ponto ao atributo-chave se houver apenas um
+	if len(atributosChave) == 1 {
+		atributoChave := atributosChave[0]
+		atributosRandomizados[atributoChave]++
+	}
+
 	// Distribuindo pontos restantes de forma aleatória
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < pontosDisponiveis; i++ {
@@ -60,12 +66,6 @@ func escolherAtributos(faixaEtaria string, atributosChave []string) map[string]i
 		if atributosRandomizados[atributo] < 5 {
 			atributosRandomizados[atributo]++
 		}
-	}
-
-	// Adicionando +1 ponto ao atributo-chave se houver apenas um
-	if len(atributosChave) == 1 {
-		atributoChave := atributosChave[0]
-		atributosRandomizados[atributoChave]++
 	}
 
 	return atributosRandomizados

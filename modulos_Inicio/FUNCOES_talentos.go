@@ -12,9 +12,13 @@ type Talento struct {
 
 // EscolherTalentos centraliza a lógica para escolher os talentos do personagem.
 func EscolherTalentos(classe, raca, faixaEtaria string, racasInfo map[string]Raca, talentosClasses map[string][]string, talentosGerais map[string][]string) map[string]Talento {
+	// Inicializar talentos sem nível com talento ascendente e de classe
 	talentosSemNivel := RandomizarTalentoAscendente(raca, nil, racasInfo)
 	talentosSemNivel = RandomizarTalentoClasse(classe, talentosSemNivel, talentosClasses)
-	talentosEscolhidos := RandomizarTalentosGerais(faixaEtaria, classe, 1, talentosSemNivel, talentosGerais)
+
+	// Limitar a quantidade máxima de talentos
+	quantidadeTalentosRestantes := 12 - len(talentosSemNivel)
+	talentosEscolhidos := RandomizarTalentosGerais(faixaEtaria, classe, 1, talentosSemNivel, talentosGerais, quantidadeTalentosRestantes)
 
 	// Converta o map[string]Talento para map[string]Talento
 	resultado := make(map[string]Talento)
@@ -37,11 +41,14 @@ func RandomizarTalentoClasse(classe string, talentosSemNivel []string, talentosC
 	return talentosSemNivel
 }
 
-// RandomizarTalentosGerais randomiza os talentos gerais de acordo com a lógica especificada.
-func RandomizarTalentosGerais(faixaEtaria, classe string, nivel int, talentosSemNivel []string, talentosGerais map[string][]string) map[string]Talento {
+// RandomizarTalentosGerais randomiza os talentos gerais de acordo com a lógica especificada e o limite de talentos.
+func RandomizarTalentosGerais(faixaEtaria, classe string, nivel int, talentosSemNivel []string, talentosGerais map[string][]string, quantidadeTalentosRestantes int) map[string]Talento {
 	quantidadeTalentos := DeterminarQuantidadeTalentos(faixaEtaria)
-	talentosEscolhidos := make(map[string]Talento)
+	if quantidadeTalentos > quantidadeTalentosRestantes {
+		quantidadeTalentos = quantidadeTalentosRestantes
+	}
 
+	talentosEscolhidos := make(map[string]Talento)
 	if rand.Intn(2) == 0 {
 		return ProcessarTalentoSacrificado(quantidadeTalentos, classe, nivel, talentosSemNivel, talentosGerais)
 	}
