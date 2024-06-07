@@ -11,7 +11,7 @@ type PersonagemStatus struct {
 	Talentos  Talentos
 }
 
-// Função para carregar dados de atributos, perícias e talentos de arquivos JSON
+// Função para carregar dados de atributos, Pericias e talentos de arquivos JSON
 func NewPersonagemStatus(atributosFile, periciasFile, talentosFile string) (*PersonagemStatus, error) {
 	status := &PersonagemStatus{}
 
@@ -22,7 +22,7 @@ func NewPersonagemStatus(atributosFile, periciasFile, talentosFile string) (*Per
 
 	err = readJSON(periciasFile, &status.Pericias)
 	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar perícias: %v", err)
+		return nil, fmt.Errorf("erro ao carregar Pericias: %v", err)
 	}
 
 	err = readJSON(talentosFile, &status.Talentos)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"math/rand"
-	"time"
 )
 
 // Função para obter os atributos chave
@@ -52,7 +51,7 @@ func escolherAtributos(faixaEtaria string, atributosChave []string, atributos At
 	}
 
 	// Distribuindo pontos restantes de forma aleatória entre os atributos não-chave
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	atributosNaoChave := []string{}
 	for atributo := range atributosRandomizados {
 		if !contemItem(atributosChave, atributo) {

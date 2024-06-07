@@ -8,7 +8,7 @@ import (
 // Pericias representa as habilidades/skills e seus atributos correspondentes
 type Pericias map[string]string
 
-// Função para carregar dados de perícias de um arquivo JSON
+// Função para carregar dados de Pericias de um arquivo JSON
 func carregarPericias(filename string) (Pericias, error) {
 	if filename == "" {
 		filename = "data/pericias.json"

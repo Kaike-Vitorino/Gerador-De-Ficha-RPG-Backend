@@ -2,12 +2,11 @@ package main
 
 import (
 	"math/rand"
-	"time"
 )
 
 // Função para gerar raça aleatória
 func gerarRaca(racas *PersonagemRacas) (string, Raca) {
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	racaAleatoria := racas.Racas[rand.Intn(len(racas.Racas))]
 	racaInfo := racas.RacasInfo[racaAleatoria]
 	return racaAleatoria, racaInfo

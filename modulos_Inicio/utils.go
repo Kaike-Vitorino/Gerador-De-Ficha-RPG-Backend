@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+func novoGeradorAleatorio() *rand.Rand {
+	return rand.New(rand.NewSource(time.Now().UnixNano()))
+}
+
 // Função auxiliar para verificar se um slice contém um item específico
 func contemItem(slice []string, item string) bool {
 	for _, a := range slice {
@@ -31,7 +35,7 @@ func randomSample(elements []string, n int) []string {
 	if n <= 0 {
 		return []string{}
 	}
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	perm := rand.Perm(len(elements))
 	sample := make([]string, n)
 	for i := 0; i < n; i++ {
@@ -65,19 +69,19 @@ func equalSlices(a, b []string) bool {
 
 // Função utilitária para selecionar um item aleatório de uma lista
 func randomChoice(options []string) string {
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	return options[rand.Intn(len(options))]
 }
 
 // randomChoiceSlice retorna um item aleatório de um slice de strings
 func randomChoiceSlice(options []string) string {
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	return options[rand.Intn(len(options))]
 }
 
 // randomChoiceFromMap retorna uma chave aleatória de um mapa
 func randomChoiceFromMap(m map[string]Arma) string {
-	rand.Seed(time.Now().UnixNano())
+	novoGeradorAleatorio()
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
