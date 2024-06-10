@@ -17,6 +17,7 @@ func main() {
 
 	// Carregar dados de classes
 	classes, err := NewPersonagemClasses("data/classes.json")
+
 	if err != nil {
 		fmt.Println("Erro ao carregar classes:", err)
 		return
@@ -61,7 +62,7 @@ func main() {
 	var pontosXP int
 	//fmt.Print("Quantidade de XP: ")
 	//fmt.Scan(&pontosXP)
-	pontosXP = 50
+	pontosXP = 150
 
 	// Gerar personagem aleatório
 	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP)

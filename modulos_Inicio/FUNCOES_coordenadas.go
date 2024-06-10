@@ -28,5 +28,5 @@ func NewCoordinates() (*Coordenadas, error) {
 }
 
 func convertCoordToPoint(c Coord) image.Point {
-	return image.Point{X: c[0], Y: c[1]}
+	return image.Point{X: c[0], Y: c[1] + 10}
 }
