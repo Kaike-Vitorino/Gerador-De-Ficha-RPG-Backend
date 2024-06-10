@@ -59,8 +59,9 @@ func main() {
 
 	// Definir quantidade de XP
 	var pontosXP int
-	fmt.Print("Quantidade de XP: ")
-	fmt.Scan(&pontosXP)
+	//fmt.Print("Quantidade de XP: ")
+	//fmt.Scan(&pontosXP)
+	pontosXP = 50
 
 	// Gerar personagem aleatório
 	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP)

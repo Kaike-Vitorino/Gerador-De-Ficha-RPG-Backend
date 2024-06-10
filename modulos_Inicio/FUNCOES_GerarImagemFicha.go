@@ -22,11 +22,11 @@ func adicionarAtributos(imagem *image.RGBA, personagem *Personagem, coordenadas 
 // Adiciona talentos
 func adicionarTalentos(imagem *image.RGBA, personagem *Personagem, coordenadas *Coordenadas) {
 	espacamento := 70
-	for i, talentoInfo := range personagem.Talentos {
-		talento, info := talentoInfo.Nome, talentoInfo.Nivel
-		adicionarTextoNaFicha(imagem, talento, coordenadas.CoordenadasSimples["talento_cord"], espacamento)
-		adicionarTextoNaFicha(imagem, info, coordenadas.CoordenadasSimples["nivel_talento_cord"], espacamento)
-		espacamento = +70
+	i := 0
+	for talento, nivel := range personagem.Talentos {
+		adicionarTextoNaFicha(imagem, talento, coordenadas.CoordenadasSimples["talento_cord"], espacamento*i)
+		adicionarTextoNaFicha(imagem, nivel.Nivel, coordenadas.CoordenadasSimples["nivel_talento_cord"], espacamento*i)
+		i++
 	}
 }
 
@@ -45,13 +45,4 @@ func adicionarArmas(imagem *image.RGBA, armasEscolhidas []string, coordenadas *C
 	} else {
 		adicionarTextoNaFichaComDefault(imagem, armasEscolhidas[0], coordenadas.CoordenadasSimples["arma_escolhida_cord"])
 	}
-}
-
-// Função principal para adicionar todas as informações na ficha
-func adicionarInformacoesFicha(imagem *image.RGBA, personagem *Personagem, coordenadas *Coordenadas, armasEscolhidas []string, classeInfo map[string]Classe, equipamentos *Equipamentos) {
-	adicionarInformacoesBasicas(imagem, personagem, coordenadas)
-	adicionarAtributos(imagem, personagem, coordenadas)
-	adicionarTalentos(imagem, personagem, coordenadas)
-	adicionarPericias(imagem, personagem, coordenadas)
-	adicionarArmas(imagem, armasEscolhidas, coordenadas, personagem.Classe)
 }
