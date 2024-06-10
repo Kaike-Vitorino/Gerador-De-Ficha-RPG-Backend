@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	racas, err := NewPersonagemRacas("")
@@ -35,12 +37,13 @@ func main() {
 
 	atributosData, err := carregarAtributos("data/atributos.json")
 	if err != nil {
-		fmt.Println("Erro ao carregar atributos:", err)
+		fmt.Println("Erro ao carregar dados de atributos:", err)
 		return
 	}
 
-	// Defina o número de pontos de XP adicionais que deseja distribuir
-	pontosXP := 50
+	var pontosXP int
+	fmt.Print("Quantidade de XP: ")
+	fmt.Scan(&pontosXP)
 
 	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP)
 	if err != nil {
@@ -48,30 +51,23 @@ func main() {
 		return
 	}
 
-	equipamentosGerados, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+	armasEscolhidas, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
 	if err != nil {
-		fmt.Println("Erro ao gerar equipamentos:", err)
+		fmt.Println("Erro ao gerar armas:", err)
 		return
 	}
-	personagem.Equipamentos = equipamentosGerados
 
-	fmt.Printf("Personagem:\n")
-	fmt.Printf("  Raça: %s\n", personagem.Raca)
-	fmt.Printf("  Classe: %s\n", personagem.Classe)
-	fmt.Printf("  Idade: %d\n", personagem.Idade)
-	fmt.Printf("  Faixa Etária: %s\n", personagem.FaixaEtaria)
-	fmt.Printf("  Atributos Chave: %v\n", personagem.AtributosChave)
-	fmt.Printf("  Atributos:\n")
-	for atributo, valor := range personagem.Atributos {
-		fmt.Printf("    %s: %d\n", atributo, valor)
-	}
-	fmt.Printf("  Pericias:\n")
-	for pericia, valor := range personagem.Pericias {
-		fmt.Printf("    %s: %d\n", pericia, valor)
-	}
-	fmt.Printf("  Talentos:\n")
-	for nome, talento := range personagem.Talentos {
-		fmt.Printf("    %s: Nível %d\n", nome, talento.Nivel)
-	}
-	fmt.Printf("  Equipamentos: %v\n", personagem.Equipamentos)
+	gerarInfoFicha(
+		personagem.Classe,
+		personagem.Raca,
+		personagem.AtributosChave,
+		personagem.Idade,
+		personagem.FaixaEtaria,
+		personagem.Atributos,
+		personagem.Talentos,
+		personagem.Pericias,
+		armasEscolhidas,
+		classes.ClasseInfo,
+		equipamentos,
+	)
 }

@@ -6,6 +6,7 @@ import (
 
 // Função principal para dividir XP entre talentos e Pericias
 func DividirXP(talentosEscolhidos map[string]Talento, periciasDistribuidas map[string]int, classe string, pericias map[string]string, talentosGerais map[string][]string, pontosXP int) (map[string]Talento, map[string]int) {
+	gerador := novoGeradorAleatorio()
 	periciasDisponiveis := make([]string, 0, len(pericias))
 	for pericia := range pericias {
 		periciasDisponiveis = append(periciasDisponiveis, pericia)
@@ -14,30 +15,27 @@ func DividirXP(talentosEscolhidos map[string]Talento, periciasDistribuidas map[s
 	copy(talentosDisponiveis, talentosGerais[classe])
 
 	for pontosXP > 0 && len(talentosEscolhidos) < 12 {
-		opcoes := []string{"Pericia nova", "Talento novo", "Aumentar nivel de Pericia", "Aumentar nivel de talento"}
-		escolha := randomChoice(opcoes)
+		escolha := gerador.Intn(4)
 
 		switch escolha {
-		case "Pericia nova":
+		case 0: // Perícia nova
 			if len(periciasDisponiveis) == 0 {
-				fmt.Println("Todas as Pericias estão distribuídas. Escolhendo novamente.")
+				fmt.Println("Todas as perícias estão distribuídas. Escolhendo novamente.")
 				continue
 			}
 			pontosXP = AdicionarNovaPericia(&periciasDisponiveis, periciasDistribuidas, pontosXP)
 
-		case "Talento novo":
+		case 1: // Talento novo
 			if len(talentosDisponiveis) == 0 {
 				fmt.Println("Todos os talentos disponíveis já foram escolhidos. Escolhendo novamente.")
 				continue
 			}
-			if len(talentosEscolhidos) < 12 {
-				pontosXP = AdicionarNovoTalento(&talentosDisponiveis, talentosEscolhidos, pontosXP)
-			}
+			pontosXP = AdicionarNovoTalento(&talentosDisponiveis, talentosEscolhidos, pontosXP)
 
-		case "Aumentar nivel de Pericia":
+		case 2: // Aumentar nível de perícia
 			pontosXP = AumentarNivelPericia(periciasDistribuidas, pontosXP)
 
-		case "Aumentar nivel de talento":
+		case 3: // Aumentar nível de talento
 			pontosXP = AumentarNivelTalento(talentosEscolhidos, pontosXP)
 
 		default:

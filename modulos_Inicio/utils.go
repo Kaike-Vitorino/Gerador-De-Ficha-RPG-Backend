@@ -88,3 +88,23 @@ func randomChoiceFromMap(m map[string]Arma) string {
 	}
 	return keys[rand.Intn(len(keys))]
 }
+
+// Função utilitária para verificar se um slice contém algum dos itens fornecidos
+func contemItemVariadico(slice []string, itens ...string) bool {
+	for _, item := range itens {
+		if contemItem(slice, item) {
+			return true
+		}
+	}
+	return false
+}
+
+// contemItem verifica se um item está presente em uma lista
+func contemItem2(slice []string, item string) bool {
+	for _, v := range slice {
+		if v == item {
+			return true
+		}
+	}
+	return false
+}

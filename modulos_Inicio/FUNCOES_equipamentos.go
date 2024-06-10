@@ -5,6 +5,7 @@ import (
 )
 
 // GerarArma gera a arma do personagem com base na classe
+// Função para gerar a arma do personagem com base na classe
 func GerarArma(classe string, classeInfo map[string]Classe, equipamentos *Equipamentos) ([]string, error) {
 	equipamentosResultantes := []string{}
 	armasDisponiveis := classeInfo[classe].Equipamentos.Arma
@@ -40,6 +41,26 @@ func GerarArma(classe string, classeInfo map[string]Classe, equipamentos *Equipa
 		f()
 	} else {
 		funcs["default"]()
+	}
+
+	// Verificar se precisa alterar a arma escolhida
+	if len(equipamentosResultantes) == 1 {
+		armaEscolhida := equipamentosResultantes[0]
+		if armaEscolhida == "Arco" {
+			armaEscolhida = randomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+			equipamentosResultantes[0] = armaEscolhida
+		} else if armaEscolhida == "Lança" {
+			armaEscolhida = randomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+			equipamentosResultantes[0] = armaEscolhida
+		}
+	} else if len(equipamentosResultantes) == 2 {
+		for i, arma := range equipamentosResultantes {
+			if arma == "Arco" {
+				equipamentosResultantes[i] = randomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+			} else if arma == "Lança" {
+				equipamentosResultantes[i] = randomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+			}
+		}
 	}
 
 	return equipamentosResultantes, nil
