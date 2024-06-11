@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 // Arma representa as caracteristicas de uma arma
@@ -58,6 +59,16 @@ func CarregarEquipamentos() (*Equipamentos, error) {
 	equipamentos.ListaArmasFinal = mergeArmas(equipamentos.ListaArmasADistancia, equipamentos.ListaArmas)
 
 	return equipamentos, nil
+}
+
+// Função para escolher um artefato musical para a classe Bardo
+func escolherArtefatoMusical(classes *PersonagemClasses, classe string) string {
+	artefatosMusicaisDisponiveis := classes.ClasseInfo[classe].Equipamentos.ArtefatoMusical
+	if len(artefatosMusicaisDisponiveis) == 0 {
+		return ""
+	}
+	indiceAleatorio := rand.Intn(len(artefatosMusicaisDisponiveis))
+	return artefatosMusicaisDisponiveis[indiceAleatorio]
 }
 
 // mergeArmas junta dois mapas de arma

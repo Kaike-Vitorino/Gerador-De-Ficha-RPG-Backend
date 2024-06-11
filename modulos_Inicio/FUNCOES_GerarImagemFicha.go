@@ -7,16 +7,16 @@ import (
 
 // Adiciona informações básicas (raça, classe, idade e faixa etária)
 func adicionarInformacoesBasicas(imagem *image.RGBA, personagem *Personagem, coordenadas *Coordenadas) {
-	adicionarTextoNaFicha(imagem, personagem.Raca, coordenadas.CoordenadasSimples["raca_cord"], 0)
-	adicionarTextoNaFicha(imagem, personagem.Classe, coordenadas.CoordenadasSimples["classe_cord"], 0)
-	adicionarTextoNaFicha(imagem, personagem.Idade, coordenadas.CoordenadasSimples["idade_cord"], 0)
-	adicionarTextoNaFicha(imagem, personagem.FaixaEtaria, coordenadas.CoordenadasSimples["faixa_etaria_cord"], 0)
+	adicionarTextoNaFichaY(imagem, personagem.Raca, coordenadas.CoordenadasSimples["raca_cord"], 0, 0)
+	adicionarTextoNaFichaY(imagem, personagem.Classe, coordenadas.CoordenadasSimples["classe_cord"], 0, 0)
+	adicionarTextoNaFichaY(imagem, personagem.Idade, coordenadas.CoordenadasSimples["idade_cord"], 0, 0)
+	adicionarTextoNaFichaY(imagem, personagem.FaixaEtaria, coordenadas.CoordenadasSimples["faixa_etaria_cord"], 0, 0)
 }
 
 // Adiciona atributos
 func adicionarAtributos(imagem *image.RGBA, personagem *Personagem, coordenadas *Coordenadas) {
 	for atributo, valor := range personagem.Atributos {
-		adicionarTextoNaFicha(imagem, valor, coordenadas.CoordenadasSimples[atributo+"_cord"], 0)
+		adicionarTextoNaFichaY(imagem, valor, coordenadas.CoordenadasSimples[atributo+"_cord"], 0, 0)
 	}
 }
 
@@ -25,8 +25,8 @@ func adicionarTalentos(imagem *image.RGBA, personagem *Personagem, coordenadas *
 	espacamento := 70
 	i := 0
 	for talento, nivel := range personagem.Talentos {
-		adicionarTextoNaFicha(imagem, talento, coordenadas.CoordenadasSimples["talento_cord"], espacamento*i)
-		adicionarTextoNaFicha(imagem, nivel.Nivel, coordenadas.CoordenadasSimples["nivel_talento_cord"], espacamento*i)
+		adicionarTextoNaFichaY(imagem, talento, coordenadas.CoordenadasSimples["talento_cord"], espacamento*i, 0)
+		adicionarTextoNaFichaY(imagem, nivel.Nivel, coordenadas.CoordenadasSimples["nivel_talento_cord"], espacamento*i, 0)
 		i++
 	}
 }
@@ -49,15 +49,15 @@ func adicionarPericias(imagem *image.RGBA, personagem *Personagem, coordenadas *
 
 	for pericia, valor := range periciasFaltando {
 		valorFormatado := fmt.Sprintf("+%d", valor)
-		adicionarTextoNaFicha(imagem, valorFormatado, coordenadas.CoordenadasSimples[pericia+"_cord"], 0)
+		adicionarTextoNaFichaY(imagem, valorFormatado, coordenadas.CoordenadasSimples[pericia+"_cord"], 0, 0)
 	}
 }
 
 // Adiciona armas
 func adicionarArmas(imagem *image.RGBA, armasEscolhidas []string, coordenadas *Coordenadas) {
 	if len(armasEscolhidas) > 1 {
-		adicionarTextoNaFicha(imagem, armasEscolhidas[0], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 0)
-		adicionarTextoNaFicha(imagem, armasEscolhidas[1], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 70)
+		adicionarTextoNaFichaY(imagem, armasEscolhidas[0], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 0, 0)
+		adicionarTextoNaFichaY(imagem, armasEscolhidas[1], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 70, 0)
 	} else {
 		adicionarTextoNaFichaComDefault(imagem, armasEscolhidas[0], coordenadas.CoordenadasSimples["arma_escolhida_cord"])
 	}
@@ -66,15 +66,15 @@ func adicionarArmas(imagem *image.RGBA, armasEscolhidas []string, coordenadas *C
 // Adiciona informações detalhadas das armas
 func adicionarInfoArmas(imagem *image.RGBA, infoArmas Arma, coordenadas *Coordenadas, armasEscolhidas []string) {
 	// Prints para debug
-	fmt.Printf("Armas Escolhidas: %v\n", armasEscolhidas)
-	fmt.Printf("Informações das Armas: Bonus - %s, Dano - %s\n", infoArmas.Bonus, infoArmas.Dano)
+	fmt.Printf("Equipamentos Escolhidas: %v\n", armasEscolhidas)
+	fmt.Printf("Informações das Equipamentos: Bonus - %s, Dano - %s\n", infoArmas.Bonus, infoArmas.Dano)
 	fmt.Printf("Coordenadas info_armas_cord: %v\n", coordenadas.CoordenadasSimples["info_armas_cord"])
 
 	if len(armasEscolhidas) > 1 {
-		adicionarTextoNaFicha(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0)
-		adicionarTextoNaFicha(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 70)
+		adicionarTextoNaFichaY(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 0)
+		adicionarTextoNaFichaY(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 140)
 	} else {
-		adicionarTextoNaFicha(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0)
-		adicionarTextoNaFicha(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 70)
+		adicionarTextoNaFichaY(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 0)
+		adicionarTextoNaFichaY(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 140)
 	}
 }

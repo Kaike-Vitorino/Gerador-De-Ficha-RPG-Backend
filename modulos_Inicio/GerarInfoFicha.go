@@ -5,82 +5,113 @@ import (
 )
 
 // Função para gerar e juntar as informações da ficha
-func gerarInfoFicha(classe, raca string, atributosChave []string, idade int, faixaEtaria string, atributosRandomizados map[string]int, talentosEscolhidos map[string]Talento, periciasDistribuidas map[string]int, armasEscolhidas []string, classeInfo map[string]Classe, equipamentos *Equipamentos) {
-	quantidadeItens := classeInfo[classe].Equipamentos.Itens
-	var itensRandomizados []string
-
-	if contemItem2([]string{"Arco Curto", "Arco Longo"}, equipamentos.ArmaEscolhida) || contemItem2(armasEscolhidas, "Arco Curto") || contemItem2(armasEscolhidas, "Arco Longo") {
-		itensRandomizados = randomSample(equipamentos.ItensComercio, quantidadeItens)
-	} else {
-		itensRandomizados = randomSample(equipamentos.ItensComercio[2:], quantidadeItens)
+func gerarInfoFicha() (*Personagem, *Coordenadas, []string, string, string, string, string, error) {
+	// Carregar dados de raças
+	racas, err := NewPersonagemRacas("data/racas.json")
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar raças: %v", err)
 	}
-	equipamentos.Items = append(equipamentos.Items, itensRandomizados...)
 
-	fmt.Printf("Itens Randomizados: %v\n", itensRandomizados)
-
-	cavalo := classeInfo[classe].Equipamentos.Cavalo
-	armaduraDisponivel := classeInfo[classe].Equipamentos.Armadura
-	var infoArmaduras Armadura
-	if armaduraDisponivel != nil {
-		infoArmaduras = equipamentos.ListaArmaduras[*armaduraDisponivel]
+	// Carregar dados de classes
+	classes, err := NewPersonagemClasses("data/classes.json")
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar classes: %v", err)
 	}
-	dxComida := classeInfo[classe].DadosRecurso["Comida"]
-	dxAgua := classeInfo[classe].DadosRecurso["Água"]
-	var infoArma1, infoArma2 Arma
 
+	// Carregar dados de status
+	status, err := NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar status: %v", err)
+	}
+
+	// Carregar dados de talentos
+	talentos, err := carregarTalentos("data/talentos.json")
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar talentos: %v", err)
+	}
+
+	// Carregar dados de atributos
+	atributosData, err := carregarAtributos("data/atributos.json")
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar dados de atributos: %v", err)
+	}
+
+	// Carregar dados de equipamentos
+	equipamentos, err := CarregarEquipamentos()
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar equipamentos: %v", err)
+	}
+
+	// Definir quantidade de XP
+	var pontosXP int
+	fmt.Print("Quantidade de XP: ")
+	fmt.Scan(&pontosXP)
+
+	// Gerar personagem aleatório
+	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, equipamentos)
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar personagem: %v", err)
+	}
+
+	// Gerar armas para o personagem
+	armasEscolhidas, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar armas: %v", err)
+	}
+
+	// Pegar informações das armas
+	var bonusArma1, danoArma1, bonusArma2, danoArma2 string
+	if personagem.Classe == "Rider" && len(armasEscolhidas) == 2 {
+		infoArma1 := equipamentos.ListaArmas[armasEscolhidas[0]]
+		infoArma2 := equipamentos.ListaArmas[armasEscolhidas[1]]
+		bonusArma1 = infoArma1.Bonus
+		danoArma1 = infoArma1.Dano
+		bonusArma2 = infoArma2.Bonus
+		danoArma2 = infoArma2.Dano
+	} else if len(armasEscolhidas) > 0 {
+		infoArma := equipamentos.ListaArmas[armasEscolhidas[0]]
+		bonusArma1 = infoArma.Bonus
+		danoArma1 = infoArma.Dano
+	}
+
+	// Carregar coordenadas
+	coordenadas, err := NewCoordinates()
+	if err != nil {
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar coordenadas: %v", err)
+	}
+
+	return personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, nil
+}
+
+/*
+	// Exibir informações do personagem gerado
 	fmt.Println("\n--- Ficha do Personagem ---")
-	fmt.Printf("Raça: %s\n", raca)
-	fmt.Printf("Classe: %s\n", classe)
+	fmt.Printf("Raça: %s\n", personagem.Raca)
+	fmt.Printf("Classe: %s\n", personagem.Classe)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Atributo(s) Chave: %v\n", atributosChave)
-	fmt.Printf("Atributos: %v\n", atributosRandomizados)
+	fmt.Printf("Atributo(s) Chave: %v\n", personagem.AtributosChave)
+	fmt.Printf("Atributos: %v\n", personagem.Atributos)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Idade: %d\n", idade)
-	fmt.Printf("Faixa Etária: %s\n", faixaEtaria)
+	fmt.Printf("Idade: %d\n", personagem.Idade)
+	fmt.Printf("Faixa Etária: %s\n", personagem.FaixaEtaria)
 	fmt.Printf("=============================\n")
 	fmt.Printf("Talentos:\n")
-	for talento, info := range talentosEscolhidos {
+	for talento, info := range personagem.Talentos {
 		fmt.Printf("%s - Nível %d\n", talento, info.Nivel)
 	}
 	fmt.Printf("=============================\n")
-	fmt.Printf("Perícias: %v\n", periciasDistribuidas)
+	fmt.Printf("Perícias: %v\n", personagem.Pericias)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Equipamentos: %v\n", equipamentos.Items)
-
-	if classe == "Rider" {
-		armasEscolhidas1, armasEscolhidas2 := armasEscolhidas[0], armasEscolhidas[1]
-		infoArma1 = equipamentos.ListaArmas[armasEscolhidas1]
-		infoArma2 = equipamentos.ListaArmas[armasEscolhidas2]
-		fmt.Printf("Sua 1ª arma: %s\n", armasEscolhidas1)
-		fmt.Printf("Infos da sua 1ª arma: %v\n", infoArma1)
-		fmt.Printf("Sua 2ª arma: %s\n", armasEscolhidas2)
-		fmt.Printf("Infos da sua 2ª arma: %v\n", infoArma2)
-	} else {
-		infoArmas := equipamentos.ListaArmas[equipamentos.ArmaEscolhida]
-		fmt.Printf("Sua arma: %s\n", equipamentos.ArmaEscolhida)
-		fmt.Printf("Infos da sua arma: %v\n", infoArmas)
+	fmt.Printf("Equipamentos: %v\n", personagem.Equipamentos)
+	if personagem.ArtefatoMusicalEscolhido != "" {
+		fmt.Printf("Artefato Musical: %s\n", personagem.ArtefatoMusicalEscolhido)
+	}
+	fmt.Printf("=============================\n")
+	fmt.Printf("Equipamentos Escolhidas:\n")
+	for _, arma := range personagem.Equipamentos {
+		if infoArma, ok := equipamentos.ListaArmas[arma]; ok {
+			fmt.Printf("Arma: %s - Bônus: %s, Dano: %s\n", arma, infoArma.Bonus, infoArma.Dano)
+		}
 	}
 
-	if armaduraDisponivel != nil {
-		fmt.Printf("Sua armadura: %s\n", *armaduraDisponivel)
-		fmt.Printf("Infos da armadura: %v\n", infoArmaduras)
-	}
-
-	if cavalo != 0 {
-		fmt.Println("Você tem um cavalo")
-		fmt.Println("Essas são as infos da sua montaria:")
-		// Exemplo: Força: 5, Agilidade: 4, Perícias: Movimentação: +2, Patrulha: +3, Dano: 1
-	}
-
-	if equipamentos.ArtefatoMusicalEscolhido != "" {
-		fmt.Printf("Seu instrumento: %s\n", equipamentos.ArtefatoMusicalEscolhido)
-	}
-	fmt.Printf("Comida: %s\n", dxComida)
-	fmt.Printf("Água: %s\n", dxAgua)
-
-	if contemItem2(equipamentos.Items, "Arco Curto") || contemItem2(equipamentos.Items, "Arco Longo") {
-		fmt.Println("Flecha: D10")
-	}
-
-	fmt.Println("--------------------------\n")
-}
+*/

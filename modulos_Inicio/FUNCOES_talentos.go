@@ -17,7 +17,7 @@ func EscolherTalentos(classe, raca, faixaEtaria string, racasInfo map[string]Rac
 	talentosSemNivel = RandomizarTalentoClasse(classe, talentosSemNivel, talentosClasses)
 
 	// Limitar a quantidade máxima de talentos
-	quantidadeTalentosRestantes := 12 - len(talentosSemNivel)
+	quantidadeTalentosRestantes := 11 - len(talentosSemNivel)
 	talentosEscolhidos := RandomizarTalentosGerais(faixaEtaria, classe, 1, talentosSemNivel, talentosGerais, quantidadeTalentosRestantes)
 
 	// Converta o map[string]Talento para map[string]Talento

@@ -66,8 +66,8 @@ func escreverArmadura(imagem *image.RGBA, texto string, coordenadas []Coord) {
 	}
 }
 
-// Função para adicionar texto na ficha
-func adicionarTextoNaFicha(imagem *image.RGBA, texto interface{}, coord Coord, espacamento int) {
+// Função para adicionar texto na ficha com espacamento no Y
+func adicionarTextoNaFichaY(imagem *image.RGBA, texto interface{}, coord Coord, espacamento int, espacamentoX int) {
 	const tamanhoDaFonte = 50
 	const caminhoDaFonte = "data/MedievalSharp.ttf"
 
@@ -79,12 +79,12 @@ func adicionarTextoNaFicha(imagem *image.RGBA, texto interface{}, coord Coord, e
 	dc.SetColor(color.Black)
 
 	point := convertCoordToPoint(coord)
-	x, y := point.X, point.Y+espacamento
+	x, y := point.X+espacamentoX, point.Y+espacamento
 	textoStr := fmt.Sprintf("%v", texto)
 	fmt.Printf("Adicionando texto '%s' em coordenadas (%d, %d) com espaçamento %d\n", textoStr, x, y, espacamento) // Adicionado para ver as coordenadas e o texto
 	dc.DrawStringAnchored(textoStr, float64(x), float64(y), 0, 1)
 }
 
 func adicionarTextoNaFichaComDefault(imagem *image.RGBA, texto interface{}, coord Coord) {
-	adicionarTextoNaFicha(imagem, texto, coord, 0)
+	adicionarTextoNaFichaY(imagem, texto, coord, 0, 0)
 }
