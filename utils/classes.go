@@ -3,8 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
+	"os"
 )
 
 // Classe representa as informacoes de uma classe
@@ -43,7 +43,7 @@ func CarregarClasses(filename string) (map[string]Classe, map[string][]string, e
 
 // Função para ler dados JSON de um arquivo
 func readJSON(filename string, v interface{}) error {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}

@@ -1,10 +1,10 @@
 package personagem
 
 import (
-	"cebola.com/internal/pkg/utils"
-	"cebola.com/utils"
 	"fmt"
 	"math/rand"
+	"psBackKG/internal/pkg/utils"
+	"psBackKG/utils"
 )
 
 // Função para distribuir os pontos de Pericia com base na faixa etária e na classe.

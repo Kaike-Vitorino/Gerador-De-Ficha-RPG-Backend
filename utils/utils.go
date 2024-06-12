@@ -5,12 +5,12 @@ import (
 	"time"
 )
 
-func novoGeradorAleatorio() *rand.Rand {
+func NovoGeradorAleatorio() *rand.Rand {
 	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
 // Função auxiliar para verificar se um slice contém um item específico
-func contemItem(slice []string, item string) bool {
+func ContemItem(slice []string, item string) bool {
 	for _, a := range slice {
 		if a == item {
 			return true
@@ -20,22 +20,22 @@ func contemItem(slice []string, item string) bool {
 }
 
 // Função auxiliar para obter o menor valor entre dois inteiros
-func menorValor(a, b int) int {
+func MenorValor(a, b int) int {
 	if a < b {
 		return a
 	}
 	return b
 }
 
-// randomSample retorna uma amostra aleatória dos elementos fornecidos.
-func randomSample(elements []string, n int) []string {
+// RandomSample retorna uma amostra aleatória dos elementos fornecidos.
+func RandomSample(elements []string, n int) []string {
 	if n > len(elements) {
 		n = len(elements)
 	}
 	if n <= 0 {
 		return []string{}
 	}
-	novoGeradorAleatorio()
+	NovoGeradorAleatorio()
 	perm := rand.Perm(len(elements))
 	sample := make([]string, n)
 	for i := 0; i < n; i++ {
@@ -44,8 +44,8 @@ func randomSample(elements []string, n int) []string {
 	return sample
 }
 
-// remove removes an element from a slice.
-func remove(slice []string, s string) []string {
+// Remove removes an element from a slice.
+func Remove(slice []string, s string) []string {
 	for i, v := range slice {
 		if v == s {
 			return append(slice[:i], slice[i+1:]...)
@@ -55,7 +55,7 @@ func remove(slice []string, s string) []string {
 }
 
 // Função para verificar a igualdade de dois slices
-func equalSlices(a, b []string) bool {
+func EqualSlices(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -68,20 +68,20 @@ func equalSlices(a, b []string) bool {
 }
 
 // Função utilitária para selecionar um item aleatório de uma lista
-func randomChoice(options []string) string {
-	novoGeradorAleatorio()
+func RandomChoice(options []string) string {
+	NovoGeradorAleatorio()
 	return options[rand.Intn(len(options))]
 }
 
-// randomChoiceSlice retorna um item aleatório de um slice de strings
-func randomChoiceSlice(options []string) string {
-	novoGeradorAleatorio()
+// RandomChoiceSlice retorna um item aleatório de um slice de strings
+func RandomChoiceSlice(options []string) string {
+	NovoGeradorAleatorio()
 	return options[rand.Intn(len(options))]
 }
 
-// randomChoiceFromMap retorna uma chave aleatória de um mapa
-func randomChoiceFromMap(m map[string]Arma) string {
-	novoGeradorAleatorio()
+// RandomChoiceFromMap retorna uma chave aleatória de um mapa
+func RandomChoiceFromMap(m map[string]Arma) string {
+	NovoGeradorAleatorio()
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -90,17 +90,17 @@ func randomChoiceFromMap(m map[string]Arma) string {
 }
 
 // Função utilitária para verificar se um slice contém algum dos itens fornecidos
-func contemItemVariadico(slice []string, itens ...string) bool {
+func ContemItemVariadico(slice []string, itens ...string) bool {
 	for _, item := range itens {
-		if contemItem(slice, item) {
+		if ContemItem(slice, item) {
 			return true
 		}
 	}
 	return false
 }
 
-// contemItem verifica se um item está presente em uma lista
-func contemItem2(slice []string, item string) bool {
+// ContemItem2 verifica se um item está presente em uma lista
+func ContemItem2(slice []string, item string) bool {
 	for _, v := range slice {
 		if v == item {
 			return true

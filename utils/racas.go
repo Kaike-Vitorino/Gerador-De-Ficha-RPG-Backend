@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 // Raca representa as informacoes de uma raca no sistema
@@ -27,7 +27,7 @@ type PersonagemRacas struct {
 // Função para carregar dados das raças de um arquivo JSON
 func carregarRacas(filename string) (map[string]Raca, error) {
 	var racas map[string]Raca
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return racas, err
 	}

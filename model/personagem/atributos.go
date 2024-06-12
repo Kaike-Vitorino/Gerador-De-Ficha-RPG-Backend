@@ -2,10 +2,11 @@ package personagem
 
 import (
 	"math/rand"
+	"psBackKG/utils"
 )
 
 // Função para obter os atributos chave
-func obterAtributosChave(classe string, racaInfo Raca, classes map[string]Classe) []string {
+func obterAtributosChave(classe string, racaInfo utils.Raca, classes map[string]utils.Classe) []string {
 	atributoChaveClasse := classes[classe].AtributoChave
 	atributoChaveRaca := racaInfo.AtributoChave
 	atributosChave := map[string]bool{
@@ -20,7 +21,7 @@ func obterAtributosChave(classe string, racaInfo Raca, classes map[string]Classe
 }
 
 // Função onde os pontos de atributo são distribuídos e o valor/nível dos atributos determinados
-func escolherAtributos(faixaEtaria string, atributosChave []string, atributos Atributos) map[string]int {
+func escolherAtributos(faixaEtaria string, atributosChave []string, atributos utils.Atributos) map[string]int {
 	// Inicializando os atributos com valores mínimos
 	atributosRandomizados := map[string]int{
 		"Forca":        atributos.Forca[0],
@@ -45,16 +46,16 @@ func escolherAtributos(faixaEtaria string, atributosChave []string, atributos At
 	// Distribuindo pontos igualmente entre os atributos chave
 	pontosPorAtributoChave := pontosDisponiveis / len(atributosChave)
 	for _, atributo := range atributosChave {
-		pontosParaAdicionar := menorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
+		pontosParaAdicionar := utils.MenorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
 		atributosRandomizados[atributo] += pontosParaAdicionar
 		pontosDisponiveis -= pontosParaAdicionar
 	}
 
 	// Distribuindo pontos restantes de forma aleatória entre os atributos não-chave
-	novoGeradorAleatorio()
+	utils.NovoGeradorAleatorio()
 	atributosNaoChave := []string{}
 	for atributo := range atributosRandomizados {
-		if !contemItem(atributosChave, atributo) {
+		if !utils.ContemItem(atributosChave, atributo) {
 			atributosNaoChave = append(atributosNaoChave, atributo)
 		}
 	}

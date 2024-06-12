@@ -2,18 +2,19 @@ package personagem
 
 import (
 	"math/rand"
+	"psBackKG/utils"
 )
 
 // Função para gerar raça aleatória
-func gerarRaca(racas *PersonagemRacas) (string, Raca) {
-	novoGeradorAleatorio()
+func gerarRaca(racas *utils.PersonagemRacas) (string, utils.Raca) {
+	utils.NovoGeradorAleatorio()
 	racaAleatoria := racas.Racas[rand.Intn(len(racas.Racas))]
 	racaInfo := racas.RacasInfo[racaAleatoria]
 	return racaAleatoria, racaInfo
 }
 
 // Função para calcular idade
-func calcularIdade(raca string, racas *PersonagemRacas) (int, string) {
+func calcularIdade(raca string, racas *utils.PersonagemRacas) (int, string) {
 	if raca == "Elfo" {
 		return rand.Intn(975) + 26, "Adulto"
 	}

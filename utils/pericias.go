@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"io/ioutil"
 )
 
 // Pericias representa as habilidades/skills e seus atributos correspondentes
@@ -14,7 +13,7 @@ func carregarPericias(filename string) (Pericias, error) {
 		filename = "data/pericias.json"
 	}
 	var pericias Pericias
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return pericias, err
 	}

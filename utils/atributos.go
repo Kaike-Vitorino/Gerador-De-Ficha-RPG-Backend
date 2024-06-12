@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 )
 
 // Atributos representa os atributos de um personagem
@@ -19,7 +19,7 @@ func carregarAtributos(filename string) (Atributos, error) {
 		filename = "data/atributos.json"
 	}
 	var atributos Atributos
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return atributos, err
 	}
