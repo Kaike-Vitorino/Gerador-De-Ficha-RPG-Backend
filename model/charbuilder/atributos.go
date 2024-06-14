@@ -1,4 +1,4 @@
-package utils
+package charbuilder
 
 import (
 	"encoding/json"
@@ -14,7 +14,7 @@ type Atributos struct {
 }
 
 // Função para carregar dados de atributos de um arquivo JSON
-func carregarAtributos(filename string) (Atributos, error) {
+func CarregarAtributos(filename string) (Atributos, error) {
 	if filename == "" {
 		filename = "data/atributos.json"
 	}

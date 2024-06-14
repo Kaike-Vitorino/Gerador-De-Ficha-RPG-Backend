@@ -1,4 +1,4 @@
-package utils
+package charbuilder
 
 import (
 	"fmt"
@@ -15,17 +15,17 @@ type PersonagemStatus struct {
 func NewPersonagemStatus(atributosFile, periciasFile, talentosFile string) (*PersonagemStatus, error) {
 	status := &PersonagemStatus{}
 
-	err := readJSON(atributosFile, &status.Atributos)
+	err := ReadJSON(atributosFile, &status.Atributos)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar atributos: %v", err)
 	}
 
-	err = readJSON(periciasFile, &status.Pericias)
+	err = ReadJSON(periciasFile, &status.Pericias)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar Pericias: %v", err)
 	}
 
-	err = readJSON(talentosFile, &status.Talentos)
+	err = ReadJSON(talentosFile, &status.Talentos)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar talentos: %v", err)
 	}

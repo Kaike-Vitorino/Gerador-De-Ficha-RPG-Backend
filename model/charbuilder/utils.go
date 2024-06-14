@@ -1,9 +1,20 @@
-package utils
+package charbuilder
 
 import (
+	"encoding/json"
 	"math/rand"
+	"os"
 	"time"
 )
+
+// Função para ler dados JSON de um arquivo
+func ReadJSON(filename string, v interface{}) error {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, v)
+}
 
 func NovoGeradorAleatorio() *rand.Rand {
 	return rand.New(rand.NewSource(time.Now().UnixNano()))

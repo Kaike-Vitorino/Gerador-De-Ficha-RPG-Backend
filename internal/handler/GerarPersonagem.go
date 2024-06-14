@@ -1,43 +1,34 @@
 package handler
 
-// Personagem representa todas as informações de um personagem
-type Personagem struct {
-	Raca                     string
-	Classe                   string
-	Idade                    int
-	FaixaEtaria              string
-	AtributosChave           []string
-	Atributos                map[string]int
-	ArtefatoMusicalEscolhido string
-	ArmaEscolhida            string
-	Equipamentos             []string
-	Pericias                 map[string]int
-	Talentos                 map[string]Talento
-}
+import (
+	"psBackKG/model/charbuilder"
+	personagemPKG "psBackKG/model/personagem"
+)
 
-// Função para gerar um personagem aleatório
-func gerarPersonagemAleatorio(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, talentos *Talentos, atributos Atributos, pontosXP int, equipamentos *Equipamentos) (*Personagem, error) {
-	raca, racaInfo := gerarRaca(racas)
-	classe := gerarClasse(raca, racas)
-	classe = "Rider"
-	atributosChave := obterAtributosChave(classe, racaInfo, classes.ClasseInfo)
-	idade, faixaEtaria := calcularIdade(raca, racas)
-	atributosDistribuidos := escolherAtributos(faixaEtaria, atributosChave, atributos)
-	periciasDistribuidas := DistribuirPericias(faixaEtaria, classe, status.Pericias, classes.ClasseInfo)
-	talentosDistribuidos := EscolherTalentos(classe, raca, faixaEtaria, racas.RacasInfo, classes.TalentosClasses, talentos.TalentosGerais)
-	talentosDistribuidos, periciasDistribuidas = DividirXP(talentosDistribuidos, periciasDistribuidas, classe, status.Pericias, talentos.TalentosGerais, pontosXP)
+// Função para Gerar um personagem aleatório
+func GerarPersonagemAleatorio(racas *charbuilder.PersonagemRacas, classes *charbuilder.PersonagemClasses, status *charbuilder.PersonagemStatus, talentos *charbuilder.Talentos, atributos charbuilder.Atributos, pontosXP int, equipamentos *charbuilder.Equipamentos) (*charbuilder.Personagem, error) {
+
+	raca, racaInfo := personagemPKG.GerarRaca(racas)
+	classe := personagemPKG.GerarClasse(raca, racas)
+	//classe = "Rider"
+	atributosChave := personagemPKG.ObterAtributosChave(classe, racaInfo, classes.ClasseInfo)
+	idade, faixaEtaria := personagemPKG.CalcularIdade(raca, racas)
+	atributosDistribuidos := personagemPKG.EscolherAtributos(faixaEtaria, atributosChave, atributos)
+	periciasDistribuidas := personagemPKG.DistribuirPericias(faixaEtaria, classe, status.Pericias, classes.ClasseInfo)
+	talentosDistribuidos := personagemPKG.EscolherTalentos(classe, raca, faixaEtaria, racas.RacasInfo, classes.TalentosClasses, talentos.TalentosGerais)
+	talentosDistribuidos, periciasDistribuidas = personagemPKG.DividirXP(talentosDistribuidos, periciasDistribuidas, classe, status.Pericias, talentos.TalentosGerais, pontosXP)
 
 	artefatoMusicalEscolhido := ""
 	if classe == "Bardo" {
-		artefatoMusicalEscolhido = escolherArtefatoMusical(classes, classe)
+		artefatoMusicalEscolhido = charbuilder.EscolherArtefatoMusical(classes, classe)
 	}
 
-	armasEscolhidas, err := GerarArma(classe, classes.ClasseInfo, equipamentos)
+	armasEscolhidas, err := personagemPKG.GerarArma(classe, classes.ClasseInfo, equipamentos)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Personagem{
+	return &charbuilder.Personagem{
 		Raca:                     raca,
 		Classe:                   classe,
 		AtributosChave:           atributosChave,

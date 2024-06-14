@@ -1,16 +1,23 @@
-package utils
+package charbuilder
 
 import (
 	"encoding/json"
+	"os"
 )
 
-// Talentos representa os talentos de um personagem
+// Talentos todos os talentos do sistema
 type Talentos struct {
 	TalentosGerais map[string][]string `json:"TalentosGerais"`
 }
 
+// Talento representa um talento do personagem
+type Talento struct {
+	Nome  string
+	Nivel int
+}
+
 // Função para carregar dados de talentos de um arquivo JSON
-func carregarTalentos(filename string) (Talentos, error) {
+func CarregarTalentos(filename string) (Talentos, error) {
 	var talentos Talentos
 	data, err := os.ReadFile(filename)
 	if err != nil {

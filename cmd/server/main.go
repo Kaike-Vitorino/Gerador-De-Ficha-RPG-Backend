@@ -5,17 +5,20 @@ import (
 	"github.com/disintegration/imaging"
 	"image"
 	"image/draw"
+	"psBackKG/internal/handler"
+	"psBackKG/model/charbuilder"
 )
 
 func main() {
-	personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, err := gerarInfoFicha()
+
+	personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, err := handler.GerarInfoFicha()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Carregar dados de ficha
-	equipamentos, err := CarregarEquipamentos()
+	equipamentos, err := charbuilder.CarregarEquipamentos()
 	if err != nil {
 		fmt.Println("Erro ao carregar ficha:", err)
 		return
@@ -34,7 +37,7 @@ func main() {
 	draw.Draw(imgRGBA, bounds, imagem, bounds.Min, draw.Src)
 
 	// Adicionar todas as informações do personagem na ficha
-	adicionarTodasInformacoesFicha(imgRGBA, personagem, coordenadas, armasEscolhidas, equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2)
+	handler.AdicionarTodasInformacoesFicha(imgRGBA, personagem, coordenadas, armasEscolhidas, equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2)
 
 	// Salvar a imagem da ficha preenchida
 	err = imaging.Save(imgRGBA, "FichaPreenchida.jpg")

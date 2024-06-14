@@ -2,42 +2,45 @@ package handler
 
 import (
 	"fmt"
+	"psBackKG/model/charbuilder"
+	"psBackKG/model/ficha"
+	personagemPKG "psBackKG/model/personagem"
 )
 
-// Função para gerar e juntar as informações da ficha
-func gerarInfoFicha() (*Personagem, *Coordenadas, []string, string, string, string, string, error) {
+// Função para Gerar e juntar as informações da ficha
+func GerarInfoFicha() (*charbuilder.Personagem, *ficha.Coordenadas, []string, string, string, string, string, error) {
 	// Carregar dados de raças
-	racas, err := NewPersonagemRacas("data/racas.json")
+	racas, err := charbuilder.NewPersonagemRacas("data/racas.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar raças: %v", err)
 	}
 
 	// Carregar dados de classes
-	classes, err := NewPersonagemClasses("data/classes.json")
+	classes, err := charbuilder.NewPersonagemClasses("data/classes.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar classes: %v", err)
 	}
 
 	// Carregar dados de status
-	status, err := NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+	status, err := charbuilder.NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar status: %v", err)
 	}
 
 	// Carregar dados de talentos
-	talentos, err := carregarTalentos("data/talentos.json")
+	talentos, err := charbuilder.CarregarTalentos("data/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar talentos: %v", err)
 	}
 
 	// Carregar dados de atributos
-	atributosData, err := carregarAtributos("data/atributos.json")
+	atributosData, err := charbuilder.CarregarAtributos("data/atributos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar dados de atributos: %v", err)
 	}
 
 	// Carregar dados de ficha
-	equipamentos, err := CarregarEquipamentos()
+	equipamentos, err := charbuilder.CarregarEquipamentos()
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar ficha: %v", err)
 	}
@@ -48,15 +51,15 @@ func gerarInfoFicha() (*Personagem, *Coordenadas, []string, string, string, stri
 	fmt.Scan(&pontosXP)
 
 	// Gerar personagem aleatório
-	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, equipamentos)
+	personagem, err := GerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, equipamentos)
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar personagem: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar personagem: %v", err)
 	}
 
 	// Gerar armas para o personagem
-	armasEscolhidas, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+	armasEscolhidas, err := personagemPKG.GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar armas: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar armas: %v", err)
 	}
 
 	// Pegar informações das armas
@@ -75,7 +78,7 @@ func gerarInfoFicha() (*Personagem, *Coordenadas, []string, string, string, stri
 	}
 
 	// Carregar coordenadas
-	coordenadas, err := NewCoordinates()
+	coordenadas, err := ficha.NewCoordinates()
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar coordenadas: %v", err)
 	}

@@ -1,4 +1,4 @@
-package utils
+package charbuilder
 
 import (
 	"encoding/json"

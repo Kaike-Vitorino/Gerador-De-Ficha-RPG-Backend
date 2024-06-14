@@ -1,7 +1,8 @@
-package utils
+package charbuilder
 
 import (
 	"encoding/json"
+	"os"
 )
 
 // Pericias representa as habilidades/skills e seus atributos correspondentes

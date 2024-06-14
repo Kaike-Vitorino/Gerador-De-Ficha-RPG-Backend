@@ -3,6 +3,7 @@ package ficha
 import (
 	"fmt"
 	"image"
+	"psBackKG/model/charbuilder"
 )
 
 type Coord [2]int
@@ -20,13 +21,13 @@ type Coordenadas struct {
 // NewCoordinates inicializa a estrutura Coordenadas com os valores do arquivo JSON
 func NewCoordinates() (*Coordenadas, error) {
 	var coords Coordenadas
-	err := main.readJSON("data/coordenadas.json", &coords)
+	err := charbuilder.ReadJSON("data/coordenadas.json", &coords)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar coordenadas: %v", err)
 	}
 	return &coords, nil
 }
 
-func convertCoordToPoint(c Coord) image.Point {
+func ConvertCoordToPoint(c Coord) image.Point {
 	return image.Point{X: c[0], Y: c[1] + 10}
 }

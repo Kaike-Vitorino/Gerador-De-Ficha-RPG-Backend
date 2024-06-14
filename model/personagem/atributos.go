@@ -2,11 +2,11 @@ package personagem
 
 import (
 	"math/rand"
-	"psBackKG/utils"
+	"psBackKG/model/charbuilder"
 )
 
 // Função para obter os atributos chave
-func obterAtributosChave(classe string, racaInfo utils.Raca, classes map[string]utils.Classe) []string {
+func ObterAtributosChave(classe string, racaInfo charbuilder.Raca, classes map[string]charbuilder.Classe) []string {
 	atributoChaveClasse := classes[classe].AtributoChave
 	atributoChaveRaca := racaInfo.AtributoChave
 	atributosChave := map[string]bool{
@@ -21,7 +21,7 @@ func obterAtributosChave(classe string, racaInfo utils.Raca, classes map[string]
 }
 
 // Função onde os pontos de atributo são distribuídos e o valor/nível dos atributos determinados
-func escolherAtributos(faixaEtaria string, atributosChave []string, atributos utils.Atributos) map[string]int {
+func EscolherAtributos(faixaEtaria string, atributosChave []string, atributos charbuilder.Atributos) map[string]int {
 	// Inicializando os atributos com valores mínimos
 	atributosRandomizados := map[string]int{
 		"Forca":        atributos.Forca[0],
@@ -46,16 +46,16 @@ func escolherAtributos(faixaEtaria string, atributosChave []string, atributos ut
 	// Distribuindo pontos igualmente entre os atributos chave
 	pontosPorAtributoChave := pontosDisponiveis / len(atributosChave)
 	for _, atributo := range atributosChave {
-		pontosParaAdicionar := utils.MenorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
+		pontosParaAdicionar := charbuilder.MenorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
 		atributosRandomizados[atributo] += pontosParaAdicionar
 		pontosDisponiveis -= pontosParaAdicionar
 	}
 
 	// Distribuindo pontos restantes de forma aleatória entre os atributos não-chave
-	utils.NovoGeradorAleatorio()
+	charbuilder.NovoGeradorAleatorio()
 	atributosNaoChave := []string{}
 	for atributo := range atributosRandomizados {
-		if !utils.ContemItem(atributosChave, atributo) {
+		if !charbuilder.ContemItem(atributosChave, atributo) {
 			atributosNaoChave = append(atributosNaoChave, atributo)
 		}
 	}

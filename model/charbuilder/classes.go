@@ -1,10 +1,7 @@
-package utils
+package charbuilder
 
 import (
-	"encoding/json"
 	"fmt"
-	"math/rand"
-	"os"
 )
 
 // Classe representa as informacoes de uma classe
@@ -37,17 +34,8 @@ func CarregarClasses(filename string) (map[string]Classe, map[string][]string, e
 		Classes         map[string]Classe   `json:"Classes"`
 		TalentosClasses map[string][]string `json:"TalentosClasses"`
 	}
-	err := readJSON(filename, &data)
+	err := ReadJSON(filename, &data)
 	return data.Classes, data.TalentosClasses, err
-}
-
-// Função para ler dados JSON de um arquivo
-func readJSON(filename string, v interface{}) error {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(data, v)
 }
 
 // NewPersonagemClasses inicializa PersonagemClasses com valores carregados do arquivo JSON
@@ -71,10 +59,4 @@ func NewPersonagemClasses(filename string) (*PersonagemClasses, error) {
 		ClasseInfo:      classes,
 		TalentosClasses: talentosClasses,
 	}, nil
-}
-
-// Função para gerar classe
-func gerarClasse(raca string, racas *PersonagemRacas) string {
-	profissoes := racas.RacasInfo[raca].ProfissoesTipicas
-	return profissoes[rand.Intn(len(profissoes))]
 }

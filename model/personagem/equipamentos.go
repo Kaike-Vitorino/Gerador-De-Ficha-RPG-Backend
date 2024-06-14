@@ -2,12 +2,11 @@ package personagem
 
 import (
 	"fmt"
-	"psBackKG/utils"
+	"psBackKG/model/charbuilder"
 )
 
 // GerarArma gera a arma do personagem com base na classe
-// Função para gerar a arma do personagem com base na classe
-func GerarArma(classe string, classeInfo map[string]utils.Classe, equipamentos *utils.Equipamentos) ([]string, error) {
+func GerarArma(classe string, classeInfo map[string]charbuilder.Classe, equipamentos *charbuilder.Equipamentos) ([]string, error) {
 	equipamentosResultantes := []string{}
 	armasDisponiveis := classeInfo[classe].Equipamentos.Arma
 
@@ -17,23 +16,23 @@ func GerarArma(classe string, classeInfo map[string]utils.Classe, equipamentos *
 
 	funcs := map[string]func(){
 		"Rider": func() {
-			armasEscolhidas := utils.RandomSample(armasDisponiveis, 2)
-			for contemCombinacaoInvalida(armasEscolhidas) {
-				armasEscolhidas = utils.RandomSample(armasDisponiveis, 2)
+			armasEscolhidas := charbuilder.RandomSample(armasDisponiveis, 2)
+			for ContemCombinacaoInvalida(armasEscolhidas) {
+				armasEscolhidas = charbuilder.RandomSample(armasDisponiveis, 2)
 			}
 			equipamentosResultantes = append(equipamentosResultantes, armasEscolhidas...)
 		},
 		"Bardo": func() {
 			armaEscolhida := armasDisponiveis[0]
-			artefatoMusicalEscolhido := utils.RandomChoiceSlice(classeInfo[classe].Equipamentos.ArtefatoMusical)
+			artefatoMusicalEscolhido := charbuilder.RandomChoiceSlice(classeInfo[classe].Equipamentos.ArtefatoMusical)
 			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida, artefatoMusicalEscolhido)
 		},
 		"Guerreiro": func() {
-			armaEscolhida := utils.RandomChoiceFromMap(equipamentos.Armas1M)
+			armaEscolhida := charbuilder.RandomChoiceFromMap(equipamentos.Armas1M)
 			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida)
 		},
 		"default": func() {
-			armaEscolhida := utils.RandomChoiceSlice(armasDisponiveis)
+			armaEscolhida := charbuilder.RandomChoiceSlice(armasDisponiveis)
 			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida)
 		},
 	}
@@ -48,18 +47,18 @@ func GerarArma(classe string, classeInfo map[string]utils.Classe, equipamentos *
 	if len(equipamentosResultantes) == 1 {
 		armaEscolhida := equipamentosResultantes[0]
 		if armaEscolhida == "Arco" {
-			armaEscolhida = utils.RandomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+			armaEscolhida = charbuilder.RandomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
 			equipamentosResultantes[0] = armaEscolhida
 		} else if armaEscolhida == "Lança" {
-			armaEscolhida = utils.RandomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+			armaEscolhida = charbuilder.RandomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
 			equipamentosResultantes[0] = armaEscolhida
 		}
 	} else if len(equipamentosResultantes) == 2 {
 		for i, arma := range equipamentosResultantes {
 			if arma == "Arco" {
-				equipamentosResultantes[i] = utils.RandomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+				equipamentosResultantes[i] = charbuilder.RandomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
 			} else if arma == "Lança" {
-				equipamentosResultantes[i] = utils.RandomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+				equipamentosResultantes[i] = charbuilder.RandomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
 			}
 		}
 	}
@@ -67,8 +66,8 @@ func GerarArma(classe string, classeInfo map[string]utils.Classe, equipamentos *
 	return equipamentosResultantes, nil
 }
 
-// contemCombinacaoInvalida verifica se a combinação de armas é inválida (Só usada no caso do Rider)
-func contemCombinacaoInvalida(armas []string) bool {
+// ContemCombinacaoInvalida verifica se a combinação de armas é inválida (Só usada no caso do Rider)
+func ContemCombinacaoInvalida(armas []string) bool {
 	invalidas := [][]string{
 		{"Lança", "Machadinha"},
 		{"Arco Curto", "Funda"},

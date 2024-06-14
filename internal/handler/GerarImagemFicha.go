@@ -2,27 +2,29 @@ package handler
 
 import (
 	"image"
+	"psBackKG/model/charbuilder"
+	"psBackKG/model/ficha"
 )
 
 // Função principal para adicionar todas as informações na ficha
-func adicionarTodasInformacoesFicha(imagem *image.RGBA, personagem *Personagem, coordenadas *Coordenadas, armasEscolhidas []string, equipamentos *Equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2 string) {
-	adicionarInformacoesBasicas(imagem, personagem, coordenadas)
-	adicionarAtributos(imagem, personagem, coordenadas)
-	adicionarTalentos(imagem, personagem, coordenadas)
-	adicionarPericias(imagem, personagem, coordenadas)
-	adicionarArmas(imagem, armasEscolhidas, coordenadas)
+func AdicionarTodasInformacoesFicha(imagem *image.RGBA, personagem *charbuilder.Personagem, coordenadas *ficha.Coordenadas, armasEscolhidas []string, equipamentos *charbuilder.Equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2 string) {
+	ficha.AdicionarInformacoesBasicas(imagem, personagem, coordenadas)
+	ficha.AdicionarAtributos(imagem, personagem, coordenadas)
+	ficha.AdicionarTalentos(imagem, personagem, coordenadas)
+	ficha.AdicionarPericias(imagem, personagem, coordenadas)
+	ficha.AdicionarArmas(imagem, armasEscolhidas, coordenadas)
 
 	if personagem.Classe == "Rider" {
-		adicionarInfoArmas(imagem, Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
-		adicionarInfoArmas(imagem, Arma{Bonus: bonusArma2, Dano: danoArma2}, coordenadas, armasEscolhidas)
+		ficha.AdicionarInfoArmas(imagem, charbuilder.Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
+		ficha.AdicionarInfoArmas(imagem, charbuilder.Arma{Bonus: bonusArma2, Dano: danoArma2}, coordenadas, armasEscolhidas)
 	} else {
-		adicionarInfoArmas(imagem, Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
+		ficha.AdicionarInfoArmas(imagem, charbuilder.Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
 	}
 
 	if personagem.Classe == "Guerreiro" {
-		escreverArmadura(imagem, "Couro", coordenadas.ArmorCoordenadas)
+		ficha.EscreverArmadura(imagem, "Couro", coordenadas.ArmorCoordenadas)
 	}
 
-	escreverTextoEmVariasCoordenadasJOGADOR(imagem, coordenadas.PlayerCoordenadas)
-	escreverTextoEmVariasCoordenadasMESTRE(imagem, coordenadas.MestreCoordenadas)
+	ficha.EscreverTextoEmVariasCoordenadasJOGADOR(imagem, coordenadas.PlayerCoordenadas)
+	ficha.EscreverTextoEmVariasCoordenadasMESTRE(imagem, coordenadas.MestreCoordenadas)
 }

@@ -1,4 +1,4 @@
-package utils
+package charbuilder
 
 import (
 	"fmt"
@@ -43,26 +43,26 @@ type Equipamentos struct {
 func CarregarEquipamentos() (*Equipamentos, error) {
 	equipamentos := &Equipamentos{}
 
-	err := readJSON("data/itensComercio.json", &equipamentos.ItensComercio)
+	err := ReadJSON("data/itensComercio.json", &equipamentos.ItensComercio)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar itens de comercio: %v", err)
 	}
 
-	err = readJSON("data/ficha.json", &equipamentos)
+	err = ReadJSON("data/equipamentos.json", &equipamentos)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar ficha: %v", err)
 	}
 
 	// Merge de armas
-	equipamentos.ListaArmas = mergeArmas(equipamentos.Armas1M, equipamentos.Armas2M)
-	equipamentos.ListaArmasADistancia = mergeArmas(equipamentos.ArmasDistancia1M, equipamentos.ArmasDistancia2M)
-	equipamentos.ListaArmasFinal = mergeArmas(equipamentos.ListaArmasADistancia, equipamentos.ListaArmas)
+	equipamentos.ListaArmas = MergeArmas(equipamentos.Armas1M, equipamentos.Armas2M)
+	equipamentos.ListaArmasADistancia = MergeArmas(equipamentos.ArmasDistancia1M, equipamentos.ArmasDistancia2M)
+	equipamentos.ListaArmasFinal = MergeArmas(equipamentos.ListaArmasADistancia, equipamentos.ListaArmas)
 
 	return equipamentos, nil
 }
 
 // Função para escolher um artefato musical para a classe Bardo
-func escolherArtefatoMusical(classes *PersonagemClasses, classe string) string {
+func EscolherArtefatoMusical(classes *PersonagemClasses, classe string) string {
 	artefatosMusicaisDisponiveis := classes.ClasseInfo[classe].Equipamentos.ArtefatoMusical
 	if len(artefatosMusicaisDisponiveis) == 0 {
 		return ""
@@ -71,8 +71,8 @@ func escolherArtefatoMusical(classes *PersonagemClasses, classe string) string {
 	return artefatosMusicaisDisponiveis[indiceAleatorio]
 }
 
-// mergeArmas junta dois mapas de arma
-func mergeArmas(map1, map2 map[string]Arma) map[string]Arma {
+// MergeArmas junta dois mapas de arma
+func MergeArmas(map1, map2 map[string]Arma) map[string]Arma {
 	merged := make(map[string]Arma)
 	for k, v := range map1 {
 		merged[k] = v
