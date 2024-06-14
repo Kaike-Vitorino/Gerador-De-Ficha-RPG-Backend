@@ -5,7 +5,7 @@ import (
 	DataChar "psBackKG/model/character_data"
 )
 
-// GerarArma gera a arma do character_logic com base na classe
+// Função para gerar uma arma aleatória para uma classe
 func GerarArma(classe string, classeInfo map[string]DataChar.Classe, equipamentos *DataChar.Equipamentos) ([]string, error) {
 	equipamentosResultantes := []string{}
 	armasDisponiveis := classeInfo[classe].Equipamentos.Arma

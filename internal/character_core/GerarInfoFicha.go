@@ -16,9 +16,13 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 	}
 
 	// Carregar dados de classes
-	classes, err := DataChar.NewPersonagemClasses("data/classes.json")
+	classesMap, talentosClasses, err := DataChar.CarregarClasses("data/classes.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar classes: %v", err)
+	}
+	classes := &DataChar.PersonagemClasses{
+		ClasseInfo:      classesMap,
+		TalentosClasses: talentosClasses,
 	}
 
 	// Carregar dados de status
@@ -39,10 +43,10 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar dados de atributos: %v", err)
 	}
 
-	// Carregar dados de character_sheet_imaging
-	equipamentos, err := DataChar.CarregarEquipamentos()
+	// Carregar dados de equipamentos
+	equipamentos, err := DataChar.CarregarEquipamentos("data/equipamentos.json")
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar character_sheet_imaging: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar equipamentos: %v", err)
 	}
 
 	// Definir quantidade de XP
@@ -50,29 +54,29 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 	fmt.Print("Quantidade de XP: ")
 	fmt.Scan(&pontosXP)
 
-	// Gerar character_logic aleatório
-	personagem, err := GerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, equipamentos)
+	// Gerar personagem aleatório
+	personagem, err := GerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, &equipamentos)
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar character_logic: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar personagem: %v", err)
 	}
 
-	// Gerar armas para o character_logic
-	armasEscolhidas, err := LogicChar.GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+	// Gerar armas para o personagem
+	armasEscolhidas, err := LogicChar.GerarArma(personagem.Classe, classes.ClasseInfo, &equipamentos)
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar armas: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao gerar armas: %v", err)
 	}
 
 	// Pegar informações das armas
 	var bonusArma1, danoArma1, bonusArma2, danoArma2 string
 	if personagem.Classe == "Rider" && len(armasEscolhidas) == 2 {
-		infoArma1 := equipamentos.ListaArmas[armasEscolhidas[0]]
-		infoArma2 := equipamentos.ListaArmas[armasEscolhidas[1]]
+		infoArma1 := obterInfoArma(armasEscolhidas[0], &equipamentos)
+		infoArma2 := obterInfoArma(armasEscolhidas[1], &equipamentos)
 		bonusArma1 = infoArma1.Bonus
 		danoArma1 = infoArma1.Dano
 		bonusArma2 = infoArma2.Bonus
 		danoArma2 = infoArma2.Dano
 	} else if len(armasEscolhidas) > 0 {
-		infoArma := equipamentos.ListaArmas[armasEscolhidas[0]]
+		infoArma := obterInfoArma(armasEscolhidas[0], &equipamentos)
 		bonusArma1 = infoArma.Bonus
 		danoArma1 = infoArma.Dano
 	}
@@ -84,6 +88,23 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 	}
 
 	return personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, nil
+}
+
+// Função auxiliar para obter as informações da arma
+func obterInfoArma(arma string, equipamentos *DataChar.Equipamentos) DataChar.Arma {
+	if infoArma, existe := equipamentos.Armas1M[arma]; existe {
+		return infoArma
+	}
+	if infoArma, existe := equipamentos.Armas2M[arma]; existe {
+		return infoArma
+	}
+	if infoArma, existe := equipamentos.ArmasDistancia1M[arma]; existe {
+		return infoArma
+	}
+	if infoArma, existe := equipamentos.ArmasDistancia2M[arma]; existe {
+		return infoArma
+	}
+	return DataChar.Arma{}
 }
 
 /*

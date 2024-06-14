@@ -4,21 +4,16 @@ import (
 	"fmt"
 )
 
-// Classe representa as informacoes de uma classe
 type Classe struct {
-	AtributoChave string            `json:"atributo_chave"`
-	Pericias      []string          `json:"pericias"`
-	Equipamentos  EquipamentoClasse `json:"character_sheet_imaging"`
-	DadosRecurso  map[string]string `json:"dados_recurso"`
-}
-
-// EquipamentoClasse representa os character_sheet_imaging disponíveis para cada classe
-type EquipamentoClasse struct {
-	Arma            []string `json:"arma"`
-	Armadura        *string  `json:"armadura"`
-	Itens           int      `json:"itens"`
-	ArtefatoMusical []string `json:"artefato_musical"`
-	Cavalo          int      `json:"cavalo"`
+	AtributoChave string   `json:"atributo_chave"`
+	Pericias      []string `json:"pericias"`
+	Equipamentos  struct {
+		Arma            []string `json:"arma"`
+		Armadura        string   `json:"armadura"`
+		Itens           int      `json:"itens"`
+		ArtefatoMusical []string `json:"artefato_musical"`
+		Cavalo          int      `json:"cavalo"`
+	} `json:"equipamentos"`
 }
 
 // PersonagemClasses armazena todas as classes e as infos dela

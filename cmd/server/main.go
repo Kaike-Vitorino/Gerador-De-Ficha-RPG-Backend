@@ -9,7 +9,7 @@ import (
 	DataChar "psBackKG/model/character_data"
 )
 
-func main1() {
+func main() {
 
 	personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, err := CoreChar.GerarInfoFicha()
 	if err != nil {
@@ -18,7 +18,7 @@ func main1() {
 	}
 
 	// Carregar dados de character_sheet_imaging
-	equipamentos, err := DataChar.CarregarEquipamentos()
+	equipamentos, err := DataChar.CarregarEquipamentos("data/equipamentos.json")
 	if err != nil {
 		fmt.Println("Erro ao carregar character_sheet_imaging:", err)
 		return
@@ -37,7 +37,7 @@ func main1() {
 	draw.Draw(imgRGBA, bounds, imagem, bounds.Min, draw.Src)
 
 	// Adicionar todas as informações do character_logic na character_sheet_imaging
-	CoreChar.AdicionarTodasInformacoesFicha(imgRGBA, personagem, coordenadas, armasEscolhidas, equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2)
+	CoreChar.AdicionarTodasInformacoesFicha(imgRGBA, personagem, coordenadas, armasEscolhidas, &equipamentos, bonusArma1, danoArma1, bonusArma2, danoArma2)
 
 	// Salvar a imagem da character_sheet_imaging preenchida
 	err = imaging.Save(imgRGBA, "FichaPreenchida.jpg")

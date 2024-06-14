@@ -1,8 +1,9 @@
 package character_data
 
 import (
-	"fmt"
+	"encoding/json"
 	"math/rand"
+	"os"
 )
 
 // Arma representa as caracteristicas de uma arma
@@ -32,33 +33,22 @@ type Equipamentos struct {
 	Armas2M                  map[string]Arma     `json:"Armas2M"`
 	ArmasDistancia1M         map[string]Arma     `json:"ArmasDistancia1M"`
 	ArmasDistancia2M         map[string]Arma     `json:"ArmasDistancia2M"`
-	ListaEscudos             map[string]Escudo   `json:"Escudos"`
-	ListaArmaduras           map[string]Armadura `json:"Armaduras"`
+	Escudos                  map[string]Arma     `json:"Escudos"`
+	Armaduras                map[string]Armadura `json:"Armaduras"`
 	ListaArmas               map[string]Arma     `json:"-"`
 	ListaArmasADistancia     map[string]Arma     `json:"-"`
 	ListaArmasFinal          map[string]Arma     `json:"-"`
 }
 
 // CarregarEquipamentos carrega os character_sheet_imaging do JSON
-func CarregarEquipamentos() (*Equipamentos, error) {
-	equipamentos := &Equipamentos{}
-
-	err := ReadJSON("data/itensComercio.json", &equipamentos.ItensComercio)
+func CarregarEquipamentos(filename string) (Equipamentos, error) {
+	var equipamentos Equipamentos
+	data, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar itens de comercio: %v", err)
+		return equipamentos, err
 	}
-
-	err = ReadJSON("data/equipamentos.json", &equipamentos)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar character_sheet_imaging: %v", err)
-	}
-
-	// Merge de armas
-	equipamentos.ListaArmas = MergeArmas(equipamentos.Armas1M, equipamentos.Armas2M)
-	equipamentos.ListaArmasADistancia = MergeArmas(equipamentos.ArmasDistancia1M, equipamentos.ArmasDistancia2M)
-	equipamentos.ListaArmasFinal = MergeArmas(equipamentos.ListaArmasADistancia, equipamentos.ListaArmas)
-
-	return equipamentos, nil
+	err = json.Unmarshal(data, &equipamentos)
+	return equipamentos, err
 }
 
 // Função para escolher um artefato musical para a classe Bardo
