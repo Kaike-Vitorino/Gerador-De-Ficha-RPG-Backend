@@ -1,10 +1,10 @@
-package charbuilder
+package character_data
 
 import (
 	"fmt"
 )
 
-// PersonagemStatus representa os stats geral do personagem, ou seja, atributos, habilidades e talentos
+// PersonagemStatus representa os stats geral do character_logic, ou seja, atributos, habilidades e talentos
 type PersonagemStatus struct {
 	Atributos Atributos
 	Pericias  Pericias

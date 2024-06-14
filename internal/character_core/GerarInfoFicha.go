@@ -1,48 +1,48 @@
-package handler
+package character_core
 
 import (
 	"fmt"
-	"psBackKG/model/charbuilder"
-	"psBackKG/model/ficha"
-	personagemPKG "psBackKG/model/personagem"
+	DataChar "psBackKG/model/character_data"
+	LogicChar "psBackKG/model/character_logic"
+	Sheet "psBackKG/model/character_sheet_imaging"
 )
 
-// Função para Gerar e juntar as informações da ficha
-func GerarInfoFicha() (*charbuilder.Personagem, *ficha.Coordenadas, []string, string, string, string, string, error) {
+// Função para Gerar e juntar as informações da character_sheet_imaging
+func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, string, string, string, string, error) {
 	// Carregar dados de raças
-	racas, err := charbuilder.NewPersonagemRacas("data/racas.json")
+	racas, err := DataChar.NewPersonagemRacas("data/racas.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar raças: %v", err)
 	}
 
 	// Carregar dados de classes
-	classes, err := charbuilder.NewPersonagemClasses("data/classes.json")
+	classes, err := DataChar.NewPersonagemClasses("data/classes.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar classes: %v", err)
 	}
 
 	// Carregar dados de status
-	status, err := charbuilder.NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+	status, err := DataChar.NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar status: %v", err)
 	}
 
 	// Carregar dados de talentos
-	talentos, err := charbuilder.CarregarTalentos("data/talentos.json")
+	talentos, err := DataChar.CarregarTalentos("data/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar talentos: %v", err)
 	}
 
 	// Carregar dados de atributos
-	atributosData, err := charbuilder.CarregarAtributos("data/atributos.json")
+	atributosData, err := DataChar.CarregarAtributos("data/atributos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar dados de atributos: %v", err)
 	}
 
-	// Carregar dados de ficha
-	equipamentos, err := charbuilder.CarregarEquipamentos()
+	// Carregar dados de character_sheet_imaging
+	equipamentos, err := DataChar.CarregarEquipamentos()
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar ficha: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar character_sheet_imaging: %v", err)
 	}
 
 	// Definir quantidade de XP
@@ -50,14 +50,14 @@ func GerarInfoFicha() (*charbuilder.Personagem, *ficha.Coordenadas, []string, st
 	fmt.Print("Quantidade de XP: ")
 	fmt.Scan(&pontosXP)
 
-	// Gerar personagem aleatório
+	// Gerar character_logic aleatório
 	personagem, err := GerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP, equipamentos)
 	if err != nil {
-		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar personagem: %v", err)
+		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar character_logic: %v", err)
 	}
 
-	// Gerar armas para o personagem
-	armasEscolhidas, err := personagemPKG.GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+	// Gerar armas para o character_logic
+	armasEscolhidas, err := LogicChar.GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao Gerar armas: %v", err)
 	}
@@ -78,7 +78,7 @@ func GerarInfoFicha() (*charbuilder.Personagem, *ficha.Coordenadas, []string, st
 	}
 
 	// Carregar coordenadas
-	coordenadas, err := ficha.NewCoordinates()
+	coordenadas, err := Sheet.NewCoordinates()
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar coordenadas: %v", err)
 	}
@@ -87,32 +87,32 @@ func GerarInfoFicha() (*charbuilder.Personagem, *ficha.Coordenadas, []string, st
 }
 
 /*
-	// Exibir informações do personagem gerado
+	// Exibir informações do character_logic gerado
 	fmt.Println("\n--- Ficha do Personagem ---")
-	fmt.Printf("Raça: %s\n", personagem.Raca)
-	fmt.Printf("Classe: %s\n", personagem.Classe)
+	fmt.Printf("Raça: %s\n", LogicChar.Raca)
+	fmt.Printf("Classe: %s\n", LogicChar.Classe)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Atributo(s) Chave: %v\n", personagem.AtributosChave)
-	fmt.Printf("Atributos: %v\n", personagem.Atributos)
+	fmt.Printf("Atributo(s) Chave: %v\n", LogicChar.AtributosChave)
+	fmt.Printf("Atributos: %v\n", LogicChar.Atributos)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Idade: %d\n", personagem.Idade)
-	fmt.Printf("Faixa Etária: %s\n", personagem.FaixaEtaria)
+	fmt.Printf("Idade: %d\n", LogicChar.Idade)
+	fmt.Printf("Faixa Etária: %s\n", LogicChar.FaixaEtaria)
 	fmt.Printf("=============================\n")
 	fmt.Printf("Talentos:\n")
-	for talento, info := range personagem.Talentos {
+	for talento, info := range LogicChar.Talentos {
 		fmt.Printf("%s - Nível %d\n", talento, info.Nivel)
 	}
 	fmt.Printf("=============================\n")
-	fmt.Printf("Perícias: %v\n", personagem.Pericias)
+	fmt.Printf("Perícias: %v\n", LogicChar.Pericias)
 	fmt.Printf("=============================\n")
-	fmt.Printf("Equipamentos: %v\n", personagem.Equipamentos)
-	if personagem.ArtefatoMusicalEscolhido != "" {
-		fmt.Printf("Artefato Musical: %s\n", personagem.ArtefatoMusicalEscolhido)
+	fmt.Printf("Equipamentos: %v\n", LogicChar.Equipamentos)
+	if LogicChar.ArtefatoMusicalEscolhido != "" {
+		fmt.Printf("Artefato Musical: %s\n", LogicChar.ArtefatoMusicalEscolhido)
 	}
 	fmt.Printf("=============================\n")
 	fmt.Printf("Equipamentos Escolhidas:\n")
-	for _, arma := range personagem.Equipamentos {
-		if infoArma, ok := ficha.ListaArmas[arma]; ok {
+	for _, arma := range LogicChar.Equipamentos {
+		if infoArma, ok := Sheet.ListaArmas[arma]; ok {
 			fmt.Printf("Arma: %s - Bônus: %s, Dano: %s\n", arma, infoArma.Bonus, infoArma.Dano)
 		}
 	}

@@ -1,4 +1,4 @@
-package charbuilder
+package character_data
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 type Classe struct {
 	AtributoChave string            `json:"atributo_chave"`
 	Pericias      []string          `json:"pericias"`
-	Equipamentos  EquipamentoClasse `json:"ficha"`
+	Equipamentos  EquipamentoClasse `json:"character_sheet_imaging"`
 	DadosRecurso  map[string]string `json:"dados_recurso"`
 }
 
-// EquipamentoClasse representa os ficha disponíveis para cada classe
+// EquipamentoClasse representa os character_sheet_imaging disponíveis para cada classe
 type EquipamentoClasse struct {
 	Arma            []string `json:"arma"`
 	Armadura        *string  `json:"armadura"`

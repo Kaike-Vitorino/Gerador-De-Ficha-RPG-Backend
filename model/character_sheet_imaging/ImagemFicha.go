@@ -1,13 +1,13 @@
-package ficha
+package character_sheet_imaging
 
 import (
 	"fmt"
 	"image"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 // Adiciona informações básicas (raça, classe, idade e faixa etária)
-func AdicionarInformacoesBasicas(imagem *image.RGBA, personagem *charbuilder.Personagem, coordenadas *Coordenadas) {
+func AdicionarInformacoesBasicas(imagem *image.RGBA, personagem *DataChar.Personagem, coordenadas *Coordenadas) {
 	AdicionarTextoNaFichaY(imagem, personagem.Raca, coordenadas.CoordenadasSimples["raca_cord"], 0, 0)
 	AdicionarTextoNaFichaY(imagem, personagem.Classe, coordenadas.CoordenadasSimples["classe_cord"], 0, 0)
 	AdicionarTextoNaFichaY(imagem, fmt.Sprintf("%d", personagem.Idade), coordenadas.CoordenadasSimples["idade_cord"], 0, 0)
@@ -15,14 +15,14 @@ func AdicionarInformacoesBasicas(imagem *image.RGBA, personagem *charbuilder.Per
 }
 
 // Adiciona atributos
-func AdicionarAtributos(imagem *image.RGBA, personagem *charbuilder.Personagem, coordenadas *Coordenadas) {
+func AdicionarAtributos(imagem *image.RGBA, personagem *DataChar.Personagem, coordenadas *Coordenadas) {
 	for atributo, valor := range personagem.Atributos {
 		AdicionarTextoNaFichaY(imagem, fmt.Sprintf("%d", valor), coordenadas.CoordenadasSimples[atributo+"_cord"], 0, 0)
 	}
 }
 
 // Adiciona talentos
-func AdicionarTalentos(imagem *image.RGBA, personagem *charbuilder.Personagem, coordenadas *Coordenadas) {
+func AdicionarTalentos(imagem *image.RGBA, personagem *DataChar.Personagem, coordenadas *Coordenadas) {
 	espacamento := 70
 	i := 0
 	for _, talento := range personagem.Talentos {
@@ -33,7 +33,7 @@ func AdicionarTalentos(imagem *image.RGBA, personagem *charbuilder.Personagem, c
 }
 
 // Adiciona perícias
-func AdicionarPericias(imagem *image.RGBA, personagem *charbuilder.Personagem, coordenadas *Coordenadas) {
+func AdicionarPericias(imagem *image.RGBA, personagem *DataChar.Personagem, coordenadas *Coordenadas) {
 	periciasDistribuidas := personagem.Pericias
 
 	// Adicione todas as perícias que faltarem com valor 0
@@ -65,7 +65,7 @@ func AdicionarArmas(imagem *image.RGBA, armasEscolhidas []string, coordenadas *C
 }
 
 // Adiciona informações detalhadas das armas
-func AdicionarInfoArmas(imagem *image.RGBA, infoArmas charbuilder.Arma, coordenadas *Coordenadas, armasEscolhidas []string) {
+func AdicionarInfoArmas(imagem *image.RGBA, infoArmas DataChar.Arma, coordenadas *Coordenadas, armasEscolhidas []string) {
 	// Prints para debug
 	fmt.Printf("Equipamentos Escolhidas: %v\n", armasEscolhidas)
 	fmt.Printf("Informações das Equipamentos: Bonus - %s, Dano - %s\n", infoArmas.Bonus, infoArmas.Dano)

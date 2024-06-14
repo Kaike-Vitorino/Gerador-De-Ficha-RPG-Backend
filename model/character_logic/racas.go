@@ -1,20 +1,20 @@
-package personagem
+package character_logic
 
 import (
 	"math/rand"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 // Função para Gerar raça aleatória
-func GerarRaca(racas *charbuilder.PersonagemRacas) (string, charbuilder.Raca) {
-	charbuilder.NovoGeradorAleatorio()
+func GerarRaca(racas *DataChar.PersonagemRacas) (string, DataChar.Raca) {
+	DataChar.NovoGeradorAleatorio()
 	racaAleatoria := racas.Racas[rand.Intn(len(racas.Racas))]
 	racaInfo := racas.RacasInfo[racaAleatoria]
 	return racaAleatoria, racaInfo
 }
 
 // Função para calcular idade
-func CalcularIdade(raca string, racas *charbuilder.PersonagemRacas) (int, string) {
+func CalcularIdade(raca string, racas *DataChar.PersonagemRacas) (int, string) {
 	if raca == "Elfo" {
 		return rand.Intn(975) + 26, "Adulto"
 	}

@@ -1,4 +1,4 @@
-package charbuilder
+package character_data
 
 import (
 	"encoding/json"

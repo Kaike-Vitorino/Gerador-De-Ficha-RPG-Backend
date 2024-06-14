@@ -1,12 +1,12 @@
-package personagem
+package character_logic
 
 import (
 	"math/rand"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 // Função para obter os atributos chave
-func ObterAtributosChave(classe string, racaInfo charbuilder.Raca, classes map[string]charbuilder.Classe) []string {
+func ObterAtributosChave(classe string, racaInfo DataChar.Raca, classes map[string]DataChar.Classe) []string {
 	atributoChaveClasse := classes[classe].AtributoChave
 	atributoChaveRaca := racaInfo.AtributoChave
 	atributosChave := map[string]bool{
@@ -21,7 +21,7 @@ func ObterAtributosChave(classe string, racaInfo charbuilder.Raca, classes map[s
 }
 
 // Função onde os pontos de atributo são distribuídos e o valor/nível dos atributos determinados
-func EscolherAtributos(faixaEtaria string, atributosChave []string, atributos charbuilder.Atributos) map[string]int {
+func EscolherAtributos(faixaEtaria string, atributosChave []string, atributos DataChar.Atributos) map[string]int {
 	// Inicializando os atributos com valores mínimos
 	atributosRandomizados := map[string]int{
 		"Forca":        atributos.Forca[0],
@@ -46,16 +46,16 @@ func EscolherAtributos(faixaEtaria string, atributosChave []string, atributos ch
 	// Distribuindo pontos igualmente entre os atributos chave
 	pontosPorAtributoChave := pontosDisponiveis / len(atributosChave)
 	for _, atributo := range atributosChave {
-		pontosParaAdicionar := charbuilder.MenorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
+		pontosParaAdicionar := DataChar.MenorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
 		atributosRandomizados[atributo] += pontosParaAdicionar
 		pontosDisponiveis -= pontosParaAdicionar
 	}
 
 	// Distribuindo pontos restantes de forma aleatória entre os atributos não-chave
-	charbuilder.NovoGeradorAleatorio()
+	DataChar.NovoGeradorAleatorio()
 	atributosNaoChave := []string{}
 	for atributo := range atributosRandomizados {
-		if !charbuilder.ContemItem(atributosChave, atributo) {
+		if !DataChar.ContemItem(atributosChave, atributo) {
 			atributosNaoChave = append(atributosNaoChave, atributo)
 		}
 	}

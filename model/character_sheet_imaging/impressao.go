@@ -1,4 +1,4 @@
-package ficha
+package character_sheet_imaging
 
 import (
 	"fmt"
@@ -66,7 +66,7 @@ func EscreverArmadura(imagem *image.RGBA, texto string, coordenadas []Coord) {
 	}
 }
 
-// Função para adicionar texto na ficha com espacamento no Y
+// Função para adicionar texto na character_sheet_imaging com espacamento no Y
 func AdicionarTextoNaFichaY(imagem *image.RGBA, texto interface{}, coord Coord, espacamento int, espacamentoX int) {
 	const tamanhoDaFonte = 50
 	const caminhoDaFonte = "data/MedievalSharp.ttf"

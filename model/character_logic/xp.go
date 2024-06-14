@@ -1,13 +1,13 @@
-package personagem
+package character_logic
 
 import (
 	"fmt"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 // Função principal para dividir XP entre talentos e Pericias
-func DividirXP(talentosEscolhidos map[string]charbuilder.Talento, periciasDistribuidas map[string]int, classe string, pericias map[string]string, talentosGerais map[string][]string, pontosXP int) (map[string]charbuilder.Talento, map[string]int) {
-	gerador := charbuilder.NovoGeradorAleatorio()
+func DividirXP(talentosEscolhidos map[string]DataChar.Talento, periciasDistribuidas map[string]int, classe string, pericias map[string]string, talentosGerais map[string][]string, pontosXP int) (map[string]DataChar.Talento, map[string]int) {
+	gerador := DataChar.NovoGeradorAleatorio()
 	periciasDisponiveis := make([]string, 0, len(pericias))
 	for pericia := range pericias {
 		periciasDisponiveis = append(periciasDisponiveis, pericia)
@@ -51,20 +51,20 @@ func DividirXP(talentosEscolhidos map[string]charbuilder.Talento, periciasDistri
 func AdicionarNovaPericia(periciasDisponiveis *[]string, periciasDistribuidas map[string]int, pontosXP int) int {
 	fmt.Println("Pericia Nova!")
 	custo := 5
-	novaPericia := charbuilder.RandomChoice(*periciasDisponiveis)
-	*periciasDisponiveis = charbuilder.Remove(*periciasDisponiveis, novaPericia)
+	novaPericia := DataChar.RandomChoice(*periciasDisponiveis)
+	*periciasDisponiveis = DataChar.Remove(*periciasDisponiveis, novaPericia)
 	periciasDistribuidas[novaPericia] = 1
 	return pontosXP - custo
 }
 
 // Função auxiliar para adicionar um novo talento
-func AdicionarNovoTalento(talentosDisponiveis *[]string, talentosEscolhidos map[string]charbuilder.Talento, pontosXP int) int {
+func AdicionarNovoTalento(talentosDisponiveis *[]string, talentosEscolhidos map[string]DataChar.Talento, pontosXP int) int {
 	fmt.Println("Talento Novo!")
 
 	custo := 3
-	novoTalento := charbuilder.RandomChoice(*talentosDisponiveis)
-	*talentosDisponiveis = charbuilder.Remove(*talentosDisponiveis, novoTalento)
-	talentosEscolhidos[novoTalento] = charbuilder.Talento{Nome: novoTalento, Nivel: 1}
+	novoTalento := DataChar.RandomChoice(*talentosDisponiveis)
+	*talentosDisponiveis = DataChar.Remove(*talentosDisponiveis, novoTalento)
+	talentosEscolhidos[novoTalento] = DataChar.Talento{Nome: novoTalento, Nivel: 1}
 	return pontosXP - custo
 }
 
@@ -84,7 +84,7 @@ func AumentarNivelPericia(periciasDistribuidas map[string]int, pontosXP int) int
 		return pontosXP
 	}
 
-	periciaAumentar := charbuilder.RandomChoice(periciasDisponiveisParaAumentar)
+	periciaAumentar := DataChar.RandomChoice(periciasDisponiveisParaAumentar)
 	nivelPericia := periciasDistribuidas[periciaAumentar]
 	custo := 5 * nivelPericia
 	periciasDistribuidas[periciaAumentar]++
@@ -92,7 +92,7 @@ func AumentarNivelPericia(periciasDistribuidas map[string]int, pontosXP int) int
 }
 
 // Função auxiliar para aumentar o nível de um talento
-func AumentarNivelTalento(talentosEscolhidos map[string]charbuilder.Talento, pontosXP int) int {
+func AumentarNivelTalento(talentosEscolhidos map[string]DataChar.Talento, pontosXP int) int {
 	fmt.Println("Nivel de talento aumentado!")
 
 	talentosDisponiveisParaAumentar := make([]string, 0)
@@ -107,9 +107,9 @@ func AumentarNivelTalento(talentosEscolhidos map[string]charbuilder.Talento, pon
 		return pontosXP
 	}
 
-	talentoAumentar := charbuilder.RandomChoice(talentosDisponiveisParaAumentar)
+	talentoAumentar := DataChar.RandomChoice(talentosDisponiveisParaAumentar)
 	nivelTalento := talentosEscolhidos[talentoAumentar].Nivel
 	custo := 3 * nivelTalento
-	talentosEscolhidos[talentoAumentar] = charbuilder.Talento{Nome: talentoAumentar, Nivel: nivelTalento + 1}
+	talentosEscolhidos[talentoAumentar] = DataChar.Talento{Nome: talentoAumentar, Nivel: nivelTalento + 1}
 	return pontosXP - custo
 }

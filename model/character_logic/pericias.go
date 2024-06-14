@@ -1,13 +1,13 @@
-package personagem
+package character_logic
 
 import (
 	"fmt"
 	"math/rand"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 // Função para distribuir os pontos de Pericia com base na faixa etária e na classe.
-func DistribuirPericias(faixaEtaria, classe string, pericias map[string]string, classesInfo map[string]charbuilder.Classe) map[string]int {
+func DistribuirPericias(faixaEtaria, classe string, pericias map[string]string, classesInfo map[string]DataChar.Classe) map[string]int {
 	pontosPorFaixaEtaria := map[string]int{
 		"Jovem":  8,
 		"Adulto": 10,
@@ -34,7 +34,7 @@ func DistribuirPericias(faixaEtaria, classe string, pericias map[string]string, 
 		periciasDistribuidas[pericia] = 0
 	}
 
-	charbuilder.NovoGeradorAleatorio()
+	DataChar.NovoGeradorAleatorio()
 	for pontosDisponiveis > 0 {
 		pericia := periciasPermitidas[rand.Intn(len(periciasPermitidas))]
 		if periciasDistribuidas[pericia] < 3 {

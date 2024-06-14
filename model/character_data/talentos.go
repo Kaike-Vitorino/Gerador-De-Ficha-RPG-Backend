@@ -1,4 +1,4 @@
-package charbuilder
+package character_data
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ type Talentos struct {
 	TalentosGerais map[string][]string `json:"TalentosGerais"`
 }
 
-// Talento representa um talento do personagem
+// Talento representa um talento do character_logic
 type Talento struct {
 	Nome  string
 	Nivel int

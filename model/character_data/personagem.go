@@ -1,6 +1,6 @@
-package charbuilder
+package character_data
 
-// Personagem representa todas as informações de um personagem
+// Personagem representa todas as informações de um character_logic
 type Personagem struct {
 	Raca                     string
 	Classe                   string

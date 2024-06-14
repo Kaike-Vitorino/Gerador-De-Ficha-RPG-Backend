@@ -1,11 +1,11 @@
-package charbuilder
+package character_data
 
 import (
 	"encoding/json"
 	"os"
 )
 
-// Atributos representa os atributos de um personagem
+// Atributos representa os atributos de um character_logic
 type Atributos struct {
 	Forca        []int `json:"Forca"`
 	Agilidade    []int `json:"Agilidade"`

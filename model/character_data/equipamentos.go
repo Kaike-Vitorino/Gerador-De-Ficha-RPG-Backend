@@ -1,4 +1,4 @@
-package charbuilder
+package character_data
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ type Armadura struct {
 	ParteDoCorpo    string `json:"ParteDoCorpo"`
 }
 
-// Equipamentos detem todas as opções de equipamento do personagem
+// Equipamentos detem todas as opções de equipamento do character_logic
 type Equipamentos struct {
 	Items                    []string            `json:"Items"`
 	ArmaEscolhida            string              `json:"ArmaEscolhida"`
@@ -39,7 +39,7 @@ type Equipamentos struct {
 	ListaArmasFinal          map[string]Arma     `json:"-"`
 }
 
-// CarregarEquipamentos carrega os ficha do JSON
+// CarregarEquipamentos carrega os character_sheet_imaging do JSON
 func CarregarEquipamentos() (*Equipamentos, error) {
 	equipamentos := &Equipamentos{}
 
@@ -50,7 +50,7 @@ func CarregarEquipamentos() (*Equipamentos, error) {
 
 	err = ReadJSON("data/equipamentos.json", &equipamentos)
 	if err != nil {
-		return nil, fmt.Errorf("erro ao carregar ficha: %v", err)
+		return nil, fmt.Errorf("erro ao carregar character_sheet_imaging: %v", err)
 	}
 
 	// Merge de armas

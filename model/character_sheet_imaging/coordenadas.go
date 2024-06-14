@@ -1,14 +1,14 @@
-package ficha
+package character_sheet_imaging
 
 import (
 	"fmt"
 	"image"
-	"psBackKG/model/charbuilder"
+	DataChar "psBackKG/model/character_data"
 )
 
 type Coord [2]int
 
-// Coordenadas tem as coordenadas do elementos da ficha do sistema RPG
+// Coordenadas tem as coordenadas do elementos da character_sheet_imaging do sistema RPG
 type Coordenadas struct {
 	CoordenadasSimples     map[string]Coord  `json:"COORDENADAS"`
 	ArmorCoordenadas       []Coord           `json:"COORDENADAS_ARMADURA"`
@@ -21,7 +21,7 @@ type Coordenadas struct {
 // NewCoordinates inicializa a estrutura Coordenadas com os valores do arquivo JSON
 func NewCoordinates() (*Coordenadas, error) {
 	var coords Coordenadas
-	err := charbuilder.ReadJSON("data/coordenadas.json", &coords)
+	err := DataChar.ReadJSON("data/coordenadas.json", &coords)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar coordenadas: %v", err)
 	}
