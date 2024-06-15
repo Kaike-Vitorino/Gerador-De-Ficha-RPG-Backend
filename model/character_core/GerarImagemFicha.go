@@ -15,9 +15,23 @@ func AdicionarTodasInformacoesFicha(imagem *image.RGBA, personagem *DataChar.Per
 	Sheet.AdicionarArmas(imagem, armasEscolhidas, coordenadas)
 
 	if personagem.Classe == "Rider" {
+		// Adiciona a primeira arma
 		Sheet.AdicionarInfoArmas(imagem, DataChar.Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
-		Sheet.AdicionarInfoArmas(imagem, DataChar.Arma{Bonus: bonusArma2, Dano: danoArma2}, coordenadas, armasEscolhidas)
+
+		// Cria uma nova coordenada para a segunda arma
+		novaCoordenada := Sheet.Coordenadas{
+			CoordenadasSimples: map[string]Sheet.Coord{
+				"info_armas_cord": {
+					coordenadas.CoordenadasSimples["info_armas_cord"][0],
+					coordenadas.CoordenadasSimples["info_armas_cord"][1] + 70,
+				},
+			},
+		}
+
+		// Adiciona a segunda arma com a nova coordenada
+		Sheet.AdicionarInfoArmas(imagem, DataChar.Arma{Bonus: bonusArma2, Dano: danoArma2}, &novaCoordenada, armasEscolhidas)
 	} else {
+		// Adiciona a arma normalmente se não for "Rider"
 		Sheet.AdicionarInfoArmas(imagem, DataChar.Arma{Bonus: bonusArma1, Dano: danoArma1}, coordenadas, armasEscolhidas)
 	}
 

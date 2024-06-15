@@ -56,7 +56,7 @@ func AdicionarPericias(imagem *image.RGBA, personagem *DataChar.Personagem, coor
 
 // Adiciona armas
 func AdicionarArmas(imagem *image.RGBA, armasEscolhidas []string, coordenadas *Coordenadas) {
-	if len(armasEscolhidas) > 1 {
+	if len(armasEscolhidas) > 0 {
 		AdicionarTextoNaFichaY(imagem, armasEscolhidas[0], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 0, 0)
 		AdicionarTextoNaFichaY(imagem, armasEscolhidas[1], coordenadas.CoordenadasSimples["arma_escolhida_cord"], 70, 0)
 	} else {
@@ -75,7 +75,7 @@ func AdicionarInfoArmas(imagem *image.RGBA, infoArmas DataChar.Arma, coordenadas
 		AdicionarTextoNaFichaY(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 0)
 		AdicionarTextoNaFichaY(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 140)
 	} else {
-		AdicionarTextoNaFichaY(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 0)
-		AdicionarTextoNaFichaY(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 0, 140)
+		AdicionarTextoNaFichaY(imagem, infoArmas.Bonus, coordenadas.CoordenadasSimples["info_armas_cord"], 70, 0)
+		AdicionarTextoNaFichaY(imagem, infoArmas.Dano, coordenadas.CoordenadasSimples["info_armas_cord"], 70, 140)
 	}
 }

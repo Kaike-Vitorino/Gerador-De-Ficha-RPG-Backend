@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	DataChar "psBackKG/model/character_data"
-	"psBackKG/model/character_logic"
+	LogicChar "psBackKG/model/character_logic"
 )
 
 func main2() {
@@ -21,7 +21,7 @@ func main2() {
 
 	// Testar função GerarArma com a classe "Bardo"
 	classe := "Bardo"
-	equipamentosGerados, err := character_logic.GerarArma(classe, classes, &equipamentos)
+	equipamentosGerados, err := LogicChar.GerarArma(classe, classes, &equipamentos)
 	if err != nil {
 		log.Fatal("Erro ao gerar arma para a classe Bardo:", err)
 	}
