@@ -1,0 +1,1799 @@
+Index: go.mod
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>module cebola.com\r\n\r\ngo 1.22.3\r\n\r\nrequire (\r\n\tgithub.com/golang/snappy v0.0.1 // indirect\r\n\tgithub.com/klauspost/compress v1.13.6 // indirect\r\n\tgithub.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect\r\n\tgithub.com/xdg-go/pbkdf2 v1.0.0 // indirect\r\n\tgithub.com/xdg-go/scram v1.1.2 // indirect\r\n\tgithub.com/xdg-go/stringprep v1.0.4 // indirect\r\n\tgithub.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect\r\n\tgo.mongodb.org/mongo-driver v1.15.0 // indirect\r\n\tgolang.org/x/crypto v0.17.0 // indirect\r\n\tgolang.org/x/sync v0.1.0 // indirect\r\n\tgolang.org/x/text v0.14.0 // indirect\r\n)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/go.mod b/go.mod
+--- a/go.mod	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ b/go.mod	(date 1717981672526)
+@@ -3,6 +3,9 @@
+ go 1.22.3
+ 
+ require (
++	github.com/disintegration/imaging v1.6.2 // indirect
++	github.com/fogleman/gg v1.3.0 // indirect
++	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+ 	github.com/golang/snappy v0.0.1 // indirect
+ 	github.com/klauspost/compress v1.13.6 // indirect
+ 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
+@@ -12,6 +15,7 @@
+ 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
+ 	go.mongodb.org/mongo-driver v1.15.0 // indirect
+ 	golang.org/x/crypto v0.17.0 // indirect
+-	golang.org/x/sync v0.1.0 // indirect
+-	golang.org/x/text v0.14.0 // indirect
++	golang.org/x/image v0.17.0 // indirect
++	golang.org/x/sync v0.7.0 // indirect
++	golang.org/x/text v0.16.0 // indirect
+ )
+Index: modulos_Inicio/FUNCOES_pericias.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_pericias.go b/modulos_Inicio/FUNCOES_pericias.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_pericias.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,46 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-	"math/rand"
+-)
+-
+-// Função para distribuir os pontos de Pericia com base na faixa etária e na classe.
+-func DistribuirPericias(faixaEtaria, classe string, pericias map[string]string, classesInfo map[string]Classe) map[string]int {
+-	pontosPorFaixaEtaria := map[string]int{
+-		"Jovem":  8,
+-		"Adulto": 10,
+-		"Idoso":  12,
+-	}
+-
+-	pontosDisponiveis, ok := pontosPorFaixaEtaria[faixaEtaria]
+-	if !ok {
+-		fmt.Printf("Faixa etária %s inválida\n", faixaEtaria)
+-		return nil
+-	}
+-
+-	// Obter as Pericias permitidas para a classe
+-	classeInfo, ok := classesInfo[classe]
+-	if !ok {
+-		fmt.Printf("Classe %s não encontrada ou sem Pericias permitidas\n", classe)
+-		return nil
+-	}
+-
+-	periciasPermitidas := classeInfo.Pericias
+-
+-	periciasDistribuidas := make(map[string]int)
+-	for _, pericia := range periciasPermitidas {
+-		periciasDistribuidas[pericia] = 0
+-	}
+-
+-	novoGeradorAleatorio()
+-	for pontosDisponiveis > 0 {
+-		pericia := periciasPermitidas[rand.Intn(len(periciasPermitidas))]
+-		if periciasDistribuidas[pericia] < 3 {
+-			periciasDistribuidas[pericia]++
+-			pontosDisponiveis--
+-		}
+-	}
+-
+-	return periciasDistribuidas
+-}
+Index: modulos_Inicio/FUNCOES_racas.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_racas.go b/modulos_Inicio/FUNCOES_racas.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_racas.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,38 +0,0 @@
+-package main
+-
+-import (
+-	"math/rand"
+-)
+-
+-// Função para gerar raça aleatória
+-func gerarRaca(racas *PersonagemRacas) (string, Raca) {
+-	novoGeradorAleatorio()
+-	racaAleatoria := racas.Racas[rand.Intn(len(racas.Racas))]
+-	racaInfo := racas.RacasInfo[racaAleatoria]
+-	return racaAleatoria, racaInfo
+-}
+-
+-// Função para calcular idade
+-func calcularIdade(raca string, racas *PersonagemRacas) (int, string) {
+-	if raca == "Elfo" {
+-		return rand.Intn(975) + 26, "Adulto"
+-	}
+-
+-	intervalos := racas.RacasInfo[raca].Idades
+-	faixasEtarias := map[string]*[2]int{
+-		"Jovem":  intervalos.Jovem,
+-		"Adulto": &intervalos.Adulto,
+-		"Idoso":  intervalos.Idoso,
+-	}
+-
+-	validFaixas := []string{}
+-	for faixa, valores := range faixasEtarias {
+-		if valores != nil {
+-			validFaixas = append(validFaixas, faixa)
+-		}
+-	}
+-
+-	escolhida := validFaixas[rand.Intn(len(validFaixas))]
+-	idadeRange := faixasEtarias[escolhida]
+-	return rand.Intn(idadeRange[1]-idadeRange[0]+1) + idadeRange[0], escolhida
+-}
+Index: modulos_Inicio/data/talentos.json
+===================================================================
+diff --git a/modulos_Inicio/data/talentos.json b/modulos_Inicio/data/talentos.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/talentos.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,12 +0,0 @@
+-{
+-    "TalentosGerais": {
+-        "Caçador": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Aquartelador", "Arremessador", "Cozinheiro", "Defensor", "Atirador preciso", "Atirador veloz", "Desbravador", "Herbalista", "Marinheiro", "Mestre da Caçada", "Pés ligeiros", "Pescador", "Sexto sentido"],
+-        "Druida": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Andarilho", "Aquartelador", "Cozinheiro", "Defensor", "Mestre em facas", "Desbravador", "Destemido", "Herbalista", "Incorruptível", "Marinheiro", "Mestre da Caçada", "Pescador"],
+-        "Mago": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Arremessador", "Arrombador", "Artífice de arcos", "Cozinheiro", "Curtidor", "Destemido", "Envenenador", "Ferreiro", "Incorruptível", "Língua afiada", "Mestre em facas"],
+-        "Rider": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Mestre em lanças", "Sangue frio", "Saque rapido", "Sortudo", "Andarilho", "Aquartelador", "Desbravador", "Herbalista", "Atirador preciso", "Atirador veloz", "Investida", "Lutador", "Marinheiro", "Mestre da Caçada", "Mestre da montaria", "Pés ligeiros", "Pescador", "Mestre em machados"],
+-        "Guerreiro": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Ameaçador", "Andarilho", "Aquartelador", "Defensor", "Investida", "Lutador", "Atirador preciso", "Atirador veloz", "Mestre em lanças", "Mestre em machados", "Mestre em espadas", "Mestre em facas", "Mestre em martelos"],
+-        "Ladino": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Arrombador", "Defensor", "Investida", "Língua afiada", "Lutador", "Pés ligeiros", "Mestre em facas"],
+-        "Mascate": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Arrombador", "Artífice de arcos", "Curtidor", "Destemido", "Envenenador", "Ferreiro", "Incorruptível", "Língua afiada", "Sexto sentido", "Mestre em facas"],
+-        "Bardo": ["Ambidestria", "Berseker", "Carrasco", "Empunhadura Firme", "Rapido como um raio", "Ruína dos Dragões", "Sangue frio", "Saque rapido", "Sortudo", "Artífice de arcos", "Cozinheiro", "Curtidor", "Defensor", "Desbravador", "Destemido", "Herbalista", "Incorruptível", "Língua afiada", "Mestre em facas"]
+-    }
+-}
+Index: modulos_Inicio/GerarInfoFicha.go
+===================================================================
+diff --git a/modulos_Inicio/GerarInfoFicha.go b/modulos_Inicio/GerarInfoFicha.go
+deleted file mode 100644
+--- a/modulos_Inicio/GerarInfoFicha.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,86 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-)
+-
+-// Função para gerar e juntar as informações da ficha
+-func gerarInfoFicha(classe, raca string, atributosChave []string, idade int, faixaEtaria string, atributosRandomizados map[string]int, talentosEscolhidos map[string]Talento, periciasDistribuidas map[string]int, armasEscolhidas []string, classeInfo map[string]Classe, equipamentos *Equipamentos) {
+-	quantidadeItens := classeInfo[classe].Equipamentos.Itens
+-	var itensRandomizados []string
+-
+-	if contemItem2([]string{"Arco Curto", "Arco Longo"}, equipamentos.ArmaEscolhida) || contemItem2(armasEscolhidas, "Arco Curto") || contemItem2(armasEscolhidas, "Arco Longo") {
+-		itensRandomizados = randomSample(equipamentos.ItensComercio, quantidadeItens)
+-	} else {
+-		itensRandomizados = randomSample(equipamentos.ItensComercio[2:], quantidadeItens)
+-	}
+-	equipamentos.Items = append(equipamentos.Items, itensRandomizados...)
+-
+-	fmt.Printf("Itens Randomizados: %v\n", itensRandomizados)
+-
+-	cavalo := classeInfo[classe].Equipamentos.Cavalo
+-	armaduraDisponivel := classeInfo[classe].Equipamentos.Armadura
+-	var infoArmaduras Armadura
+-	if armaduraDisponivel != nil {
+-		infoArmaduras = equipamentos.ListaArmaduras[*armaduraDisponivel]
+-	}
+-	dxComida := classeInfo[classe].DadosRecurso["Comida"]
+-	dxAgua := classeInfo[classe].DadosRecurso["Água"]
+-	var infoArma1, infoArma2 Arma
+-
+-	fmt.Println("\n--- Ficha do Personagem ---")
+-	fmt.Printf("Raça: %s\n", raca)
+-	fmt.Printf("Classe: %s\n", classe)
+-	fmt.Printf("=============================\n")
+-	fmt.Printf("Atributo(s) Chave: %v\n", atributosChave)
+-	fmt.Printf("Atributos: %v\n", atributosRandomizados)
+-	fmt.Printf("=============================\n")
+-	fmt.Printf("Idade: %d\n", idade)
+-	fmt.Printf("Faixa Etária: %s\n", faixaEtaria)
+-	fmt.Printf("=============================\n")
+-	fmt.Printf("Talentos:\n")
+-	for talento, info := range talentosEscolhidos {
+-		fmt.Printf("%s - Nível %d\n", talento, info.Nivel)
+-	}
+-	fmt.Printf("=============================\n")
+-	fmt.Printf("Perícias: %v\n", periciasDistribuidas)
+-	fmt.Printf("=============================\n")
+-	fmt.Printf("Equipamentos: %v\n", equipamentos.Items)
+-
+-	if classe == "Rider" {
+-		armasEscolhidas1, armasEscolhidas2 := armasEscolhidas[0], armasEscolhidas[1]
+-		infoArma1 = equipamentos.ListaArmas[armasEscolhidas1]
+-		infoArma2 = equipamentos.ListaArmas[armasEscolhidas2]
+-		fmt.Printf("Sua 1ª arma: %s\n", armasEscolhidas1)
+-		fmt.Printf("Infos da sua 1ª arma: %v\n", infoArma1)
+-		fmt.Printf("Sua 2ª arma: %s\n", armasEscolhidas2)
+-		fmt.Printf("Infos da sua 2ª arma: %v\n", infoArma2)
+-	} else {
+-		infoArmas := equipamentos.ListaArmas[equipamentos.ArmaEscolhida]
+-		fmt.Printf("Sua arma: %s\n", equipamentos.ArmaEscolhida)
+-		fmt.Printf("Infos da sua arma: %v\n", infoArmas)
+-	}
+-
+-	if armaduraDisponivel != nil {
+-		fmt.Printf("Sua armadura: %s\n", *armaduraDisponivel)
+-		fmt.Printf("Infos da armadura: %v\n", infoArmaduras)
+-	}
+-
+-	if cavalo != 0 {
+-		fmt.Println("Você tem um cavalo")
+-		fmt.Println("Essas são as infos da sua montaria:")
+-		// Exemplo: Força: 5, Agilidade: 4, Perícias: Movimentação: +2, Patrulha: +3, Dano: 1
+-	}
+-
+-	if equipamentos.ArtefatoMusicalEscolhido != "" {
+-		fmt.Printf("Seu instrumento: %s\n", equipamentos.ArtefatoMusicalEscolhido)
+-	}
+-	fmt.Printf("Comida: %s\n", dxComida)
+-	fmt.Printf("Água: %s\n", dxAgua)
+-
+-	if contemItem2(equipamentos.Items, "Arco Curto") || contemItem2(equipamentos.Items, "Arco Longo") {
+-		fmt.Println("Flecha: D10")
+-	}
+-
+-	fmt.Println("--------------------------\n")
+-}
+Index: modulos_Inicio/data/racas.json
+===================================================================
+diff --git a/modulos_Inicio/data/racas.json b/modulos_Inicio/data/racas.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/racas.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,50 +0,0 @@
+-{
+-    "Humano": {
+-        "atributo_chave": "Empatia",
+-        "talento_ascendente": "Adaptive",
+-        "profissoes_tipicas": ["Caçador", "Druida", "Mago", "Rider", "Guerreiro", "Ladino", "Mascate", "Bardo"],
+-        "idades": {"Jovem": [16, 25], "Adulto": [26, 50], "Idoso": [51, 80]}
+-    },
+-    "Meio-Elfo": {
+-        "atributo_chave": "Inteligencia",
+-        "talento_ascendente": "Poder mental",
+-        "profissoes_tipicas": ["Druida", "Mago", "Ladino"],
+-        "idades": {"Jovem": [16, 30], "Adulto": [31, 100], "Idoso": [101, 180]}
+-    },
+-    "Anão": {
+-        "atributo_chave": "Forca",
+-        "talento_ascendente": "Bravura Indômita",
+-        "profissoes_tipicas": ["Guerreiro", "Mascate", "Bardo"],
+-        "idades": {"Jovem": [20, 40], "Adulto": [41, 80], "Idoso": [81, 121]}
+-    },
+-    "Halfling": {
+-        "atributo_chave": "Empatia",
+-        "talento_ascendente": "Difícil de Acertar",
+-        "profissoes_tipicas": ["Bardo", "Mascate", "Ladino"],
+-        "idades": {"Jovem": [16, 25], "Adulto": [26, 60], "Idoso": [61, 98]}
+-    },
+-    "Lupino": {
+-        "atributo_chave": "Agilidade",
+-        "talento_ascendente": "Instinto de Caça",
+-        "profissoes_tipicas": ["Caçador", "Druida", "Guerreiro"],
+-        "idades": {"Jovem": [13, 20], "Adulto": [21, 40], "Idoso": [41, 65]}
+-    },
+-    "Orc": {
+-        "atributo_chave": "Forca",
+-        "talento_ascendente": "Imbatível",
+-        "profissoes_tipicas": ["Caçador", "Guerreiro", "Ladino"],
+-        "idades": {"Jovem": [13, 20], "Adulto": [21, 45], "Idoso": [46, 70]}
+-    },
+-    "Goblin": {
+-        "atributo_chave": "Agilidade",
+-        "talento_ascendente": "Noturno",
+-        "profissoes_tipicas": ["Caçador", "Rider", "Ladino"],
+-        "idades": {"Jovem": [16, 25], "Adulto": [26, 60], "Idoso": [61, 95]}
+-    },
+-    "Elfo": {
+-        "atributo_chave": "Agilidade",
+-        "talento_ascendente": "Paz Interior",
+-        "profissoes_tipicas": ["Caçador", "Druida", "Bardo"],
+-        "idades": {"Adulto": [26, 1000]}
+-    }
+-}
+Index: modulos_Inicio/data/pericias.json
+===================================================================
+diff --git a/modulos_Inicio/data/pericias.json b/modulos_Inicio/data/pericias.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/pericias.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,18 +0,0 @@
+-{
+-    "Potência": "Forca",
+-    "Resiliência": "Forca",
+-    "Luta": "Forca",
+-    "Artesanato": "Forca",
+-    "Furtividade": "Agilidade",
+-    "Artimanha": "Agilidade",
+-    "Movimentação": "Agilidade",
+-    "Pontaria": "Agilidade",
+-    "Patrulha": "Inteligencia",
+-    "Tradição": "Inteligencia",
+-    "Sobrevivência": "Inteligencia",
+-    "Discernimento": "Inteligencia",
+-    "Manipulação": "Empatia",
+-    "Atuação": "Empatia",
+-    "Cura": "Empatia",
+-    "Adestramento": "Empatia"
+-}
+Index: modulos_Inicio/DATA_atributos.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_atributos.go b/modulos_Inicio/DATA_atributos.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_atributos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,28 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"io/ioutil"
+-)
+-
+-// Atributos representa os atributos de um personagem
+-type Atributos struct {
+-	Forca        []int `json:"Forca"`
+-	Agilidade    []int `json:"Agilidade"`
+-	Inteligencia []int `json:"Inteligencia"`
+-	Empatia      []int `json:"Empatia"`
+-}
+-
+-// Função para carregar dados de atributos de um arquivo JSON
+-func carregarAtributos(filename string) (Atributos, error) {
+-	if filename == "" {
+-		filename = "data/atributos.json"
+-	}
+-	var atributos Atributos
+-	data, err := ioutil.ReadFile(filename)
+-	if err != nil {
+-		return atributos, err
+-	}
+-	err = json.Unmarshal(data, &atributos)
+-	return atributos, err
+-}
+Index: modulos_Inicio/DATA_talentos.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_talentos.go b/modulos_Inicio/DATA_talentos.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_talentos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,25 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"io/ioutil"
+-)
+-
+-// Talentos representa os talentos de um personagem
+-type Talentos struct {
+-	TalentosGerais map[string][]string `json:"TalentosGerais"`
+-}
+-
+-// Função para carregar dados de talentos de um arquivo JSON
+-func carregarTalentos(filename string) (Talentos, error) {
+-	var talentos Talentos
+-	data, err := ioutil.ReadFile(filename)
+-	if err != nil {
+-		return talentos, err
+-	}
+-	err = json.Unmarshal(data, &talentos)
+-	if err != nil {
+-		return talentos, err
+-	}
+-	return talentos, nil
+-}
+Index: modulos_Inicio/FUNCOES_equipamentos.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_equipamentos.go b/modulos_Inicio/FUNCOES_equipamentos.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_equipamentos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,83 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-)
+-
+-// GerarArma gera a arma do personagem com base na classe
+-// Função para gerar a arma do personagem com base na classe
+-func GerarArma(classe string, classeInfo map[string]Classe, equipamentos *Equipamentos) ([]string, error) {
+-	equipamentosResultantes := []string{}
+-	armasDisponiveis := classeInfo[classe].Equipamentos.Arma
+-
+-	if len(armasDisponiveis) == 0 {
+-		return equipamentosResultantes, fmt.Errorf("Nenhuma arma disponível para a classe %s", classe)
+-	}
+-
+-	funcs := map[string]func(){
+-		"Rider": func() {
+-			armasEscolhidas := randomSample(armasDisponiveis, 2)
+-			for contemCombinacaoInvalida(armasEscolhidas) {
+-				armasEscolhidas = randomSample(armasDisponiveis, 2)
+-			}
+-			equipamentosResultantes = append(equipamentosResultantes, armasEscolhidas...)
+-		},
+-		"Bardo": func() {
+-			armaEscolhida := armasDisponiveis[0]
+-			artefatoMusicalEscolhido := randomChoiceSlice(classeInfo[classe].Equipamentos.ArtefatoMusical)
+-			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida, artefatoMusicalEscolhido)
+-		},
+-		"Guerreiro": func() {
+-			armaEscolhida := randomChoiceFromMap(equipamentos.Armas1M)
+-			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida)
+-		},
+-		"default": func() {
+-			armaEscolhida := randomChoiceSlice(armasDisponiveis)
+-			equipamentosResultantes = append(equipamentosResultantes, armaEscolhida)
+-		},
+-	}
+-
+-	if f, ok := funcs[classe]; ok {
+-		f()
+-	} else {
+-		funcs["default"]()
+-	}
+-
+-	// Verificar se precisa alterar a arma escolhida
+-	if len(equipamentosResultantes) == 1 {
+-		armaEscolhida := equipamentosResultantes[0]
+-		if armaEscolhida == "Arco" {
+-			armaEscolhida = randomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+-			equipamentosResultantes[0] = armaEscolhida
+-		} else if armaEscolhida == "Lança" {
+-			armaEscolhida = randomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+-			equipamentosResultantes[0] = armaEscolhida
+-		}
+-	} else if len(equipamentosResultantes) == 2 {
+-		for i, arma := range equipamentosResultantes {
+-			if arma == "Arco" {
+-				equipamentosResultantes[i] = randomChoiceSlice([]string{"Arco Curto", "Arco Longo"})
+-			} else if arma == "Lança" {
+-				equipamentosResultantes[i] = randomChoiceSlice([]string{"Lança Curta", "Lança Longa"})
+-			}
+-		}
+-	}
+-
+-	return equipamentosResultantes, nil
+-}
+-
+-// contemCombinacaoInvalida verifica se a combinação de armas é inválida (So usada no caso do Rider)
+-func contemCombinacaoInvalida(armas []string) bool {
+-	invalidas := [][]string{
+-		{"Lança", "Machadinha"},
+-		{"Arco Curto", "Funda"},
+-	}
+-
+-	for _, invalida := range invalidas {
+-		if (armas[0] == invalida[0] && armas[1] == invalida[1]) || (armas[0] == invalida[1] && armas[1] == invalida[0]) {
+-			return true
+-		}
+-	}
+-
+-	return false
+-}
+Index: modulos_Inicio/GerarPersonagem.go
+===================================================================
+diff --git a/modulos_Inicio/GerarPersonagem.go b/modulos_Inicio/GerarPersonagem.go
+deleted file mode 100644
+--- a/modulos_Inicio/GerarPersonagem.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,41 +0,0 @@
+-package main
+-
+-// Personagem representa todas as informações de um personagem
+-type Personagem struct {
+-	Raca                     string
+-	Classe                   string
+-	Idade                    int
+-	FaixaEtaria              string
+-	AtributosChave           []string
+-	Atributos                map[string]int
+-	ArtefatoMusicalEscolhido string
+-	ArmaEscolhida            string
+-	Equipamentos             []string
+-	Pericias                 map[string]int
+-	Talentos                 map[string]Talento
+-}
+-
+-// Função para gerar um personagem aleatório
+-func gerarPersonagemAleatorio(racas *PersonagemRacas, classes *PersonagemClasses, status *PersonagemStatus, talentos *Talentos, atributos Atributos, pontosXP int) (*Personagem, error) {
+-	raca, racaInfo := gerarRaca(racas)
+-	classe := gerarClasse(raca, racas)
+-	atributosChave := obterAtributosChave(classe, racaInfo, classes.ClasseInfo)
+-	idade, faixaEtaria := calcularIdade(raca, racas)
+-	atributosDistribuidos := escolherAtributos(faixaEtaria, atributosChave, atributos)
+-	periciasDistribuidas := DistribuirPericias(faixaEtaria, classe, status.Pericias, classes.ClasseInfo)
+-	talentosDistribuidos := EscolherTalentos(classe, raca, faixaEtaria, racas.RacasInfo, classes.TalentosClasses, talentos.TalentosGerais)
+-
+-	// Dividir XP extra
+-	talentosDistribuidos, periciasDistribuidas = DividirXP(talentosDistribuidos, periciasDistribuidas, classe, status.Pericias, talentos.TalentosGerais, pontosXP)
+-
+-	return &Personagem{
+-		Raca:           raca,
+-		Classe:         classe,
+-		AtributosChave: atributosChave,
+-		Atributos:      atributosDistribuidos,
+-		Idade:          idade,
+-		FaixaEtaria:    faixaEtaria,
+-		Pericias:       periciasDistribuidas,
+-		Talentos:       talentosDistribuidos,
+-	}, nil
+-}
+Index: modulos_Inicio/data/atributos.json
+===================================================================
+diff --git a/modulos_Inicio/data/atributos.json b/modulos_Inicio/data/atributos.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/atributos.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,6 +0,0 @@
+-{
+-    "Forca": [0, 5],
+-    "Agilidade": [0, 5],
+-    "Inteligencia": [0, 5],
+-    "Empatia": [0, 5]
+-}
+Index: modulos_Inicio/data/equipamentos.json
+===================================================================
+diff --git a/modulos_Inicio/data/equipamentos.json b/modulos_Inicio/data/equipamentos.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/equipamentos.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,57 +0,0 @@
+-{
+-    "Armas1M": {
+-        "Faca": {"Bonus": "+1", "Dano": "1"},
+-        "Adaga": {"Bonus": "+1", "Dano": "1"},
+-        "Facão": {"Bonus": "+2", "Dano": "2"},
+-        "Espada Curta": {"Bonus": "+2", "Dano": "1"},
+-        "Espada Larga": {"Bonus": "+2", "Dano": "2"},
+-        "Espada Longa": {"Bonus": "+2", "Dano": "2"},
+-        "Cimitarra": {"Bonus": "+1", "Dano": "2"},
+-        "Machadinha": {"Bonus": "+2", "Dano": "2"},
+-        "Machado de Batalha": {"Bonus": "+2", "Dano": "2"},
+-        "Maça": {"Bonus": "+2", "Dano": "1"},
+-        "Maça Estrela": {"Bonus": "+2", "Dano": "2"},
+-        "Martelo de Guerra": {"Bonus": "+2", "Dano": "2"},
+-        "Mangual": {"Bonus": "+1", "Dano": "2"},
+-        "Porrete": {"Bonus": "+1", "Dano": "1"},
+-        "Lança Curta": {"Bonus": "+1", "Dano": "1"},
+-        "Tridente": {"Bonus": "+1", "Dano": "2"}
+-    },
+-    "Armas2M": {
+-        "Montante": {"Bonus": "+3", "Dano": "3"},
+-        "Machado de Duas Mãos": {"Bonus": "+2", "Dano": "3"},
+-        "Clava": {"Bonus": "+1", "Dano": "2"},
+-        "Malho": {"Bonus": "+2", "Dano": "3"},
+-        "Bastão": {"Bonus": "+1", "Dano": "1"},
+-        "Lança Longa": {"Bonus": "+2", "Dano": "1"},
+-        "Pique": {"Bonus": "+2", "Dano": "2"},
+-        "Alabarda": {"Bonus": "+2", "Dano": "2"}
+-    },
+-    "ArmasDistancia1M": {
+-        "Pedra": {"Bonus": "+0", "Dano": "1"},
+-        "Faca de Arremesso": {"Bonus": "+1", "Dano": "1"},
+-        "Machado de Arremesso": {"Bonus": "+1", "Dano": "2"},
+-        "Azagaia": {"Bonus": "+2", "Dano": "1"},
+-        "Funda": {"Bonus": "+1", "Dano": "1"}
+-    },
+-    "ArmasDistancia2M": {
+-        "Arco Curto": {"Bonus": "+2", "Dano": "1"},
+-        "Arco Longo": {"Bonus": "+2", "Dano": "1"},
+-        "Besta Leve": {"Bonus": "+1", "Dano": "2"},
+-        "Besta Pesada": {"Bonus": "+1", "Dano": "3"}
+-    },
+-    "Escudos": {
+-        "Escudo Pequeno": {"Bonus": "+1"},
+-        "Escudo Grande": {"Bonus": "+2"}
+-    },
+-    "Armaduras": {
+-        "Couro": {"ValorDeArmadura": "2", "ParteDoCorpo": "Corpo"},
+-        "Couro Batido": {"ValorDeArmadura": "3", "ParteDoCorpo": "Corpo"},
+-        "Cota de Malha": {"ValorDeArmadura": "6", "ParteDoCorpo": "Corpo"},
+-        "Armadura de Placas": {"ValorDeArmadura": "8", "ParteDoCorpo": "Corpo"},
+-        "Capuz de Couro Batido": {"ValorDeArmadura": "1", "ParteDoCorpo": "Cabeça"},
+-        "Elmo Aberto": {"ValorDeArmadura": "2", "ParteDoCorpo": "Cabeça"},
+-        "Elmo Fechado": {"ValorDeArmadura": "3", "ParteDoCorpo": "Cabeça"},
+-        "Grande Elmo": {"ValorDeArmadura": "4", "ParteDoCorpo": "Cabeça"}
+-    }
+-}
+Index: modulos_Inicio/DATA_classes.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_classes.go b/modulos_Inicio/DATA_classes.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_classes.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,80 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"fmt"
+-	"io/ioutil"
+-	"math/rand"
+-)
+-
+-// Classe representa as informacoes de uma classe
+-type Classe struct {
+-	AtributoChave string            `json:"atributo_chave"`
+-	Pericias      []string          `json:"pericias"`
+-	Equipamentos  EquipamentoClasse `json:"equipamentos"`
+-	DadosRecurso  map[string]string `json:"dados_recurso"`
+-}
+-
+-// EquipamentoClasse representa os equipamentos disponíveis para cada classe
+-type EquipamentoClasse struct {
+-	Arma            []string `json:"arma"`
+-	Armadura        *string  `json:"armadura"`
+-	Itens           int      `json:"itens"`
+-	ArtefatoMusical []string `json:"artefato_musical"`
+-	Cavalo          int      `json:"cavalo"`
+-}
+-
+-// PersonagemClasses armazena todas as classes e as infos dela
+-type PersonagemClasses struct {
+-	Classes         []string
+-	ClasseInfo      map[string]Classe
+-	TalentosClasses map[string][]string
+-}
+-
+-// Função para carregar dados de classes de um arquivo JSON
+-func CarregarClasses(filename string) (map[string]Classe, map[string][]string, error) {
+-	var data struct {
+-		Classes         map[string]Classe   `json:"Classes"`
+-		TalentosClasses map[string][]string `json:"TalentosClasses"`
+-	}
+-	err := readJSON(filename, &data)
+-	return data.Classes, data.TalentosClasses, err
+-}
+-
+-// Função para ler dados JSON de um arquivo
+-func readJSON(filename string, v interface{}) error {
+-	data, err := ioutil.ReadFile(filename)
+-	if err != nil {
+-		return err
+-	}
+-	return json.Unmarshal(data, v)
+-}
+-
+-// NewPersonagemClasses inicializa PersonagemClasses com valores carregados do arquivo JSON
+-func NewPersonagemClasses(filename string) (*PersonagemClasses, error) {
+-	if filename == "" {
+-		filename = "data/classes.json"
+-	}
+-
+-	classes, talentosClasses, err := CarregarClasses(filename)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar classes: %v", err)
+-	}
+-
+-	classNames := make([]string, 0, len(classes))
+-	for name := range classes {
+-		classNames = append(classNames, name)
+-	}
+-
+-	return &PersonagemClasses{
+-		Classes:         classNames,
+-		ClasseInfo:      classes,
+-		TalentosClasses: talentosClasses,
+-	}, nil
+-}
+-
+-// Função para gerar classe
+-func gerarClasse(raca string, racas *PersonagemRacas) string {
+-	profissoes := racas.RacasInfo[raca].ProfissoesTipicas
+-	return profissoes[rand.Intn(len(profissoes))]
+-}
+Index: modulos_Inicio/data/classes.json
+===================================================================
+diff --git a/modulos_Inicio/data/classes.json b/modulos_Inicio/data/classes.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/classes.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,144 +0,0 @@
+-{
+-    "Classes": {
+-        "Caçador": {
+-            "atributo_chave": "Agilidade",
+-            "pericias": ["Furtividade", "Movimentação", "Pontaria", "Patrulha", "Sobrevivência"],
+-            "equipamentos": {
+-                "arma": ["Arco", "Funda"],
+-                "armadura": null,
+-                "itens": 2,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D8",
+-                "Flechas": "D10",
+-                "Prata": "D6"
+-            }
+-        },
+-        "Druida": {
+-            "atributo_chave": "Inteligencia",
+-            "pericias": ["Resiliência", "Sobrevivência", "Discernimento", "Cura", "Adestramento"],
+-            "equipamentos": {
+-                "arma": ["Bastão", "Faca"],
+-                "armadura": null,
+-                "itens": 1,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D8",
+-                "Prata": "D6"
+-            }
+-        },
+-        "Mago": {
+-            "atributo_chave": "Inteligencia",
+-            "pericias": ["Artesanato", "Artimanha", "Tradição", "Discernimento", "Manipulação"],
+-            "equipamentos": {
+-                "arma": ["Bastão", "Faca"],
+-                "armadura": null,
+-                "itens": 1,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D6",
+-                "Água": "D8",
+-                "Prata": "D8"
+-            }
+-        },
+-        "Rider": {
+-            "atributo_chave": "Agilidade",
+-            "pericias": ["Resiliência", "Luta", "Pontaria", "Sobrevivência", "Adestramento"],
+-            "equipamentos": {
+-                "arma": ["Lança Curta", "Machadinha", "Arco Curto", "Funda"],
+-                "armadura": null,
+-                "itens": 1,
+-                "artefato_musical": [],
+-                "cavalo": 1
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D8",
+-                "Flechas": "D10",
+-                "Prata": "D6"
+-            }
+-        },
+-        "Guerreiro": {
+-            "atributo_chave": "Forca",
+-            "pericias": ["Potência", "Resiliência", "Luta", "Movimentação"],
+-            "equipamentos": {
+-                "arma": ["Faca", "Adaga", "Facão", "Espada Curta", "Espada Larga", "Espada Longa", "Cimitarra", "Machadinha", "Machado de Batalha", "Maça", "Maça Estrela", "Martelo de Guerra", "Mangual", "Porrete", "Lança Curta", "Tridente"],
+-                "armadura": "Couro",
+-                "itens": 1,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D6",
+-                "Prata": "D6"
+-            }
+-        },
+-        "Ladino": {
+-            "atributo_chave": "Agilidade",
+-            "pericias": ["Luta", "Furtividade", "Artimanha", "Movimentação", "Manipulação"],
+-            "equipamentos": {
+-                "arma": ["Adaga"],
+-                "armadura": null,
+-                "itens": 2,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D6",
+-                "Água": "D6",
+-                "Prata": "D10"
+-            }
+-        },
+-        "Mascate": {
+-            "atributo_chave": "Empatia",
+-            "pericias": ["Artesanato", "Artimanha", "Patrulha", "Discernimento", "Manipulação"],
+-            "equipamentos": {
+-                "arma": ["Faca"],
+-                "armadura": null,
+-                "itens": 3,
+-                "artefato_musical": [],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D8",
+-                "Prata": "D12"
+-            }
+-        },
+-        "Bardo": {
+-            "atributo_chave": "Empatia",
+-            "pericias": ["Tradição", "Discernimento", "Manipulação", "Atuação", "Cura"],
+-            "equipamentos": {
+-                "arma": ["Faca"],
+-                "armadura": null,
+-                "itens": 1,
+-                "artefato_musical": ["Lira", "Flauta"],
+-                "cavalo": 0
+-            },
+-            "dados_recurso": {
+-                "Comida": "D8",
+-                "Água": "D6",
+-                "Prata": "D8"
+-            }
+-        }
+-    },
+-    "TalentosClasses": {
+-        "Caçador": ["Caminho da Fera", "Caminho da Flecha", "Caminho da Floresta"],
+-        "Druida": ["Caminho da Cura", "Caminho da Visão", "Caminho do Metamorfo"],
+-        "Mago": ["Caminho da Morte", "Caminho das Rochas", "Caminho do Sangue", "Caminho dos Símbolos"],
+-        "Rider": ["Caminho das Planícies", "Caminho do Cavaleiro", "Caminho do Companheiro"],
+-        "Guerreiro": ["Caminho da Lâmina", "Caminho do Escudo", "Caminho do Inimigo"],
+-        "Ladino": ["Caminho do Matador", "Caminho do Rosto", "Caminho do Veneno"],
+-        "Mascate": ["Caminho da Mentira", "Caminho das Muitas Coisas", "Caminho do Ouro"],
+-        "Bardo": ["Caminho da Canção", "Caminho do Grito de Guerra", "Caminho do Hino"]
+-    }
+-}
+Index: modulos_Inicio/FUNCOES_talentos.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_talentos.go b/modulos_Inicio/FUNCOES_talentos.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_talentos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,92 +0,0 @@
+-package main
+-
+-import (
+-	"math/rand"
+-)
+-
+-// Talento representa um talento do personagem
+-type Talento struct {
+-	Nome  string
+-	Nivel int
+-}
+-
+-// EscolherTalentos centraliza a lógica para escolher os talentos do personagem.
+-func EscolherTalentos(classe, raca, faixaEtaria string, racasInfo map[string]Raca, talentosClasses map[string][]string, talentosGerais map[string][]string) map[string]Talento {
+-	// Inicializar talentos sem nível com talento ascendente e de classe
+-	talentosSemNivel := RandomizarTalentoAscendente(raca, nil, racasInfo)
+-	talentosSemNivel = RandomizarTalentoClasse(classe, talentosSemNivel, talentosClasses)
+-
+-	// Limitar a quantidade máxima de talentos
+-	quantidadeTalentosRestantes := 12 - len(talentosSemNivel)
+-	talentosEscolhidos := RandomizarTalentosGerais(faixaEtaria, classe, 1, talentosSemNivel, talentosGerais, quantidadeTalentosRestantes)
+-
+-	// Converta o map[string]Talento para map[string]Talento
+-	resultado := make(map[string]Talento)
+-	for nome, talento := range talentosEscolhidos {
+-		resultado[nome] = talento
+-	}
+-	return resultado
+-}
+-
+-func RandomizarTalentoAscendente(raca string, talentosSemNivel []string, racasInfo map[string]Raca) []string {
+-	talentoAscendente := racasInfo[raca].TalentoAscendente
+-	return append(talentosSemNivel, talentoAscendente)
+-}
+-
+-func RandomizarTalentoClasse(classe string, talentosSemNivel []string, talentosClasses map[string][]string) []string {
+-	if talentosDisponiveis, ok := talentosClasses[classe]; ok {
+-		talentoEscolhido := talentosDisponiveis[rand.Intn(len(talentosDisponiveis))]
+-		return append(talentosSemNivel, talentoEscolhido)
+-	}
+-	return talentosSemNivel
+-}
+-
+-// RandomizarTalentosGerais randomiza os talentos gerais de acordo com a lógica especificada e o limite de talentos.
+-func RandomizarTalentosGerais(faixaEtaria, classe string, nivel int, talentosSemNivel []string, talentosGerais map[string][]string, quantidadeTalentosRestantes int) map[string]Talento {
+-	quantidadeTalentos := DeterminarQuantidadeTalentos(faixaEtaria)
+-	if quantidadeTalentos > quantidadeTalentosRestantes {
+-		quantidadeTalentos = quantidadeTalentosRestantes
+-	}
+-
+-	talentosEscolhidos := make(map[string]Talento)
+-	if rand.Intn(2) == 0 {
+-		return ProcessarTalentoSacrificado(quantidadeTalentos, classe, nivel, talentosSemNivel, talentosGerais)
+-	}
+-
+-	talentosGeraisEscolhidos := randomSample(talentosGerais[classe], quantidadeTalentos)
+-	for _, talento := range talentosGeraisEscolhidos {
+-		talentosEscolhidos[talento] = Talento{Nome: talento, Nivel: nivel}
+-	}
+-	return talentosEscolhidos
+-}
+-
+-// ProcessarTalentoSacrificado processa a lógica de talentos sacrificados.
+-func ProcessarTalentoSacrificado(quantidadeTalentos int, classe string, nivel int, talentosSemNivel []string, talentosGerais map[string][]string) map[string]Talento {
+-	talentosEscolhidos := make(map[string]Talento)
+-	if quantidadeTalentos-1 > 0 {
+-		talentosAtuaisEscolhidos := randomSample(talentosGerais[classe], quantidadeTalentos-1)
+-		talentosSemNivel = append(talentosSemNivel, talentosAtuaisEscolhidos...)
+-
+-		talentoNivel2 := talentosSemNivel[rand.Intn(len(talentosSemNivel))]
+-		talentosSemNivel = remove(talentosSemNivel, talentoNivel2)
+-
+-		talentosEscolhidos[talentoNivel2] = Talento{Nome: talentoNivel2, Nivel: nivel + 1}
+-		for _, talento := range talentosSemNivel {
+-			talentosEscolhidos[talento] = Talento{Nome: talento, Nivel: nivel}
+-		}
+-	}
+-	return talentosEscolhidos
+-}
+-
+-func DeterminarQuantidadeTalentos(faixaEtaria string) int {
+-	talentosPorFaixaEtaria := map[string]int{
+-		"Jovem":  1,
+-		"Adulto": 2,
+-		"Idoso":  3,
+-	}
+-
+-	if quantidade, ok := talentosPorFaixaEtaria[faixaEtaria]; ok {
+-		return quantidade
+-	}
+-	return 0
+-}
+Index: modulos_Inicio/data/itensComercio.json
+===================================================================
+diff --git a/modulos_Inicio/data/itensComercio.json b/modulos_Inicio/data/itensComercio.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/itensComercio.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,12 +0,0 @@
+-[
+-    "Flechas, Ponta de Ferro", "Flechas, Ponta de Madeira", "Aljava", "Arpéu",
+-    "Corda, 10 Metros", "Vela de Sebo", "Lamparina a Óleo", "Lanterna", "Tochas",
+-    "Saco", "Mochila", "Cantil", "Bandagens", "Óleo de Lâmpada", "Pena e Tinta",
+-    "Pergaminho", "Cobertor", "Cobertor de Peles", "Pederneira", "Gazuas",
+-    "Cozinha de Campo", "Caldeirão", "Cálice de Metal", "Caneca", "Prato de Metal",
+-    "Faca de Cozinha", "Colher", "Armadilha de Urso", "Armadilha de Laço", "Barril",
+-    "Jarra", "Tenda Pequena", "Tenda Grande", "Anzol e Linha", "Rede de Pesca",
+-    "Lupa", "Símbolo Sagrado", "Giz", "Mapa", "Luneta", "Bola de Cristal",
+-    "Ampulheta", "Balança", "Flauta", "Berrante", "Lira", "Harpa", "Tambor",
+-    "Veneno Letal/Antídoto", "Veneno Paralisante/Antídoto", "Veneno Sonífero/Antídoto", "Veneno Alucinógeno/Antídoto"
+-]
+Index: modulos_Inicio/data/coordenadas.json
+===================================================================
+diff --git a/modulos_Inicio/data/coordenadas.json b/modulos_Inicio/data/coordenadas.json
+deleted file mode 100644
+--- a/modulos_Inicio/data/coordenadas.json	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,83 +0,0 @@
+-{
+-    "COORDENADAS": {
+-        "raca_cord": [210, 195],
+-        "classe_cord": [1560, 195],
+-        "Forca_cord": [275, 515],
+-        "Agilidade_cord": [275, 615],
+-        "Inteligencia_cord": [275, 715],
+-        "Empatia_cord": [275, 815],
+-        "talento_cord": [1342, 1135],
+-        "nivel_talento_cord": [1860, 1135],
+-        "Potencia_cord": [535, 1632],
+-        "Resiliência_cord": [535, 1702],
+-        "Luta_cord": [535, 1772],
+-        "Artesanato_cord": [535, 1842],
+-        "Furtividade_cord": [535, 1912],
+-        "Artimanha_cord": [535, 1982],
+-        "Movimentação_cord": [535, 2052],
+-        "Pontaria_cord": [535, 2122],
+-        "Patrulha_cord": [535, 2192],
+-        "Tradição_cord": [535, 2262],
+-        "Sobrevivência_cord": [535, 2332],
+-        "Discernimento_cord": [535, 2402],
+-        "Manipulação_cord": [535, 2472],
+-        "Atuação_cord": [535, 2542],
+-        "Cura_cord": [535, 2612],
+-        "Adestramento_cord": [535, 2682],
+-        "idade_cord": [810, 996],
+-        "faixa_etaria_cord": [810, 1045],
+-        "arma_escolhida_cord": [700, 2120],
+-        "info_armas_cord": [1200, 2120]
+-    },
+-    "COORDENADAS_ARMADURA": [
+-        [790, 1780]
+-    ],
+-    "COORDENADAS_USER": [
+-        [770, 440],
+-        [770, 630],
+-        [770, 830],
+-        [1410, 530],
+-        [1410, 680],
+-        [1410, 820]
+-    ],
+-    "COORDENADAS_MESTRE": [
+-        [1000, 1030]
+-    ],
+-    "COORDENADAS_PAG2": {
+-        "Dx_comida": [322, 392],
+-        "Dx_agua": [322, 412],
+-        "prata_rolada": [322, 432],
+-        "equipamentos_cord": [322, 332]
+-    },
+-    "MAPA_CHAVES": {
+-        "raca_cord": "raca",
+-        "classe_cord": "classe",
+-        "Forca_cord": "atributos_randomizados",
+-        "Agilidade_cord": "atributos_randomizados",
+-        "Inteligencia_cord": "atributos_randomizados",
+-        "Empatia_cord": "atributos_randomizados",
+-        "talento_cord": "talentos_escolhidos",
+-        "nivel_talento_cord": "talentos_escolhidos",
+-        "idade_cord": "idade",
+-        "faixa_etaria_cord": "faixa_etaria",
+-        "equipamentos_cord": "equipamentos",
+-        "arma_escolhida_cord": "arma_escolhida",
+-        "info_armas_cord": "info_armas",
+-        "Potencia_cord": "pericias_distribuidas",
+-        "Resiliência_cord": "pericias_distribuidas",
+-        "Luta_cord": "pericias_distribuidas",
+-        "Artesanato_cord": "pericias_distribuidas",
+-        "Furtividade_cord": "pericias_distribuidas",
+-        "Artimanha_cord": "pericias_distribuidas",
+-        "Movimentação_cord": "pericias_distribuidas",
+-        "Pontaria_cord": "pericias_distribuidas",
+-        "Patrulha_cord": "pericias_distribuidas",
+-        "Tradição_cord": "pericias_distribuidas",
+-        "Sobrevivência_cord": "pericias_distribuidas",
+-        "Discernimento_cord": "pericias_distribuidas",
+-        "Manipulação_cord": "pericias_distribuidas",
+-        "Atuação_cord": "pericias_distribuidas",
+-        "Cura_cord": "pericias_distribuidas",
+-        "Adestramento_cord": "pericias_distribuidas"
+-    }
+-}
+Index: modulos_Inicio/utils.go
+===================================================================
+diff --git a/modulos_Inicio/utils.go b/modulos_Inicio/utils.go
+deleted file mode 100644
+--- a/modulos_Inicio/utils.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,110 +0,0 @@
+-package main
+-
+-import (
+-	"math/rand"
+-	"time"
+-)
+-
+-func novoGeradorAleatorio() *rand.Rand {
+-	return rand.New(rand.NewSource(time.Now().UnixNano()))
+-}
+-
+-// Função auxiliar para verificar se um slice contém um item específico
+-func contemItem(slice []string, item string) bool {
+-	for _, a := range slice {
+-		if a == item {
+-			return true
+-		}
+-	}
+-	return false
+-}
+-
+-// Função auxiliar para obter o menor valor entre dois inteiros
+-func menorValor(a, b int) int {
+-	if a < b {
+-		return a
+-	}
+-	return b
+-}
+-
+-// randomSample retorna uma amostra aleatória dos elementos fornecidos.
+-func randomSample(elements []string, n int) []string {
+-	if n > len(elements) {
+-		n = len(elements)
+-	}
+-	if n <= 0 {
+-		return []string{}
+-	}
+-	novoGeradorAleatorio()
+-	perm := rand.Perm(len(elements))
+-	sample := make([]string, n)
+-	for i := 0; i < n; i++ {
+-		sample[i] = elements[perm[i]]
+-	}
+-	return sample
+-}
+-
+-// remove removes an element from a slice.
+-func remove(slice []string, s string) []string {
+-	for i, v := range slice {
+-		if v == s {
+-			return append(slice[:i], slice[i+1:]...)
+-		}
+-	}
+-	return slice
+-}
+-
+-// Função para verificar a igualdade de dois slices
+-func equalSlices(a, b []string) bool {
+-	if len(a) != len(b) {
+-		return false
+-	}
+-	for i := range a {
+-		if a[i] != b[i] {
+-			return false
+-		}
+-	}
+-	return true
+-}
+-
+-// Função utilitária para selecionar um item aleatório de uma lista
+-func randomChoice(options []string) string {
+-	novoGeradorAleatorio()
+-	return options[rand.Intn(len(options))]
+-}
+-
+-// randomChoiceSlice retorna um item aleatório de um slice de strings
+-func randomChoiceSlice(options []string) string {
+-	novoGeradorAleatorio()
+-	return options[rand.Intn(len(options))]
+-}
+-
+-// randomChoiceFromMap retorna uma chave aleatória de um mapa
+-func randomChoiceFromMap(m map[string]Arma) string {
+-	novoGeradorAleatorio()
+-	keys := make([]string, 0, len(m))
+-	for k := range m {
+-		keys = append(keys, k)
+-	}
+-	return keys[rand.Intn(len(keys))]
+-}
+-
+-// Função utilitária para verificar se um slice contém algum dos itens fornecidos
+-func contemItemVariadico(slice []string, itens ...string) bool {
+-	for _, item := range itens {
+-		if contemItem(slice, item) {
+-			return true
+-		}
+-	}
+-	return false
+-}
+-
+-// contemItem verifica se um item está presente em uma lista
+-func contemItem2(slice []string, item string) bool {
+-	for _, v := range slice {
+-		if v == item {
+-			return true
+-		}
+-	}
+-	return false
+-}
+Index: modulos_Inicio/DATA_equipamentos.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_equipamentos.go b/modulos_Inicio/DATA_equipamentos.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_equipamentos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,73 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-)
+-
+-// Arma representa as caracteristicas de uma arma
+-type Arma struct {
+-	Bonus string `json:"Bonus"`
+-	Dano  string `json:"Dano"`
+-}
+-
+-// Escudo representa as caracteristicas de um escudo
+-type Escudo struct {
+-	Bonus string `json:"Bonus"`
+-}
+-
+-// Armadura representa as caracteristicas de uma armadura
+-type Armadura struct {
+-	ValorDeArmadura string `json:"ValorDeArmadura"`
+-	ParteDoCorpo    string `json:"ParteDoCorpo"`
+-}
+-
+-// Equipamentos detem todas as opções de equipamento do personagem
+-type Equipamentos struct {
+-	Items                    []string            `json:"Items"`
+-	ArmaEscolhida            string              `json:"ArmaEscolhida"`
+-	ArtefatoMusicalEscolhido string              `json:"ArtefatoMusicalEscolhido"`
+-	ItensComercio            []string            `json:"ItensComercio"`
+-	Armas1M                  map[string]Arma     `json:"Armas1M"`
+-	Armas2M                  map[string]Arma     `json:"Armas2M"`
+-	ArmasDistancia1M         map[string]Arma     `json:"ArmasDistancia1M"`
+-	ArmasDistancia2M         map[string]Arma     `json:"ArmasDistancia2M"`
+-	ListaEscudos             map[string]Escudo   `json:"Escudos"`
+-	ListaArmaduras           map[string]Armadura `json:"Armaduras"`
+-	ListaArmas               map[string]Arma     `json:"-"`
+-	ListaArmasADistancia     map[string]Arma     `json:"-"`
+-	ListaArmasFinal          map[string]Arma     `json:"-"`
+-}
+-
+-// CarregarEquipamentos carrega os equipamentos do JSON
+-func CarregarEquipamentos() (*Equipamentos, error) {
+-	equipamentos := &Equipamentos{}
+-
+-	err := readJSON("data/itensComercio.json", &equipamentos.ItensComercio)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar itens de comercio: %v", err)
+-	}
+-
+-	err = readJSON("data/equipamentos.json", &equipamentos)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar equipamentos: %v", err)
+-	}
+-
+-	// Merge de armas
+-	equipamentos.ListaArmas = mergeArmas(equipamentos.Armas1M, equipamentos.Armas2M)
+-	equipamentos.ListaArmasADistancia = mergeArmas(equipamentos.ArmasDistancia1M, equipamentos.ArmasDistancia2M)
+-	equipamentos.ListaArmasFinal = mergeArmas(equipamentos.ListaArmasADistancia, equipamentos.ListaArmas)
+-
+-	return equipamentos, nil
+-}
+-
+-// mergeArmas junta dois mapas de arma
+-func mergeArmas(map1, map2 map[string]Arma) map[string]Arma {
+-	merged := make(map[string]Arma)
+-	for k, v := range map1 {
+-		merged[k] = v
+-	}
+-	for k, v := range map2 {
+-		merged[k] = v
+-	}
+-	return merged
+-}
+Index: modulos_Inicio/DATA_pericias.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_pericias.go b/modulos_Inicio/DATA_pericias.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_pericias.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,23 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"io/ioutil"
+-)
+-
+-// Pericias representa as habilidades/skills e seus atributos correspondentes
+-type Pericias map[string]string
+-
+-// Função para carregar dados de Pericias de um arquivo JSON
+-func carregarPericias(filename string) (Pericias, error) {
+-	if filename == "" {
+-		filename = "data/pericias.json"
+-	}
+-	var pericias Pericias
+-	data, err := ioutil.ReadFile(filename)
+-	if err != nil {
+-		return pericias, err
+-	}
+-	err = json.Unmarshal(data, &pericias)
+-	return pericias, err
+-}
+Index: modulos_Inicio/FUNCOES_xp.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_xp.go b/modulos_Inicio/FUNCOES_xp.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_xp.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,114 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-)
+-
+-// Função principal para dividir XP entre talentos e Pericias
+-func DividirXP(talentosEscolhidos map[string]Talento, periciasDistribuidas map[string]int, classe string, pericias map[string]string, talentosGerais map[string][]string, pontosXP int) (map[string]Talento, map[string]int) {
+-	gerador := novoGeradorAleatorio()
+-	periciasDisponiveis := make([]string, 0, len(pericias))
+-	for pericia := range pericias {
+-		periciasDisponiveis = append(periciasDisponiveis, pericia)
+-	}
+-	talentosDisponiveis := make([]string, len(talentosGerais[classe]))
+-	copy(talentosDisponiveis, talentosGerais[classe])
+-
+-	for pontosXP > 0 && len(talentosEscolhidos) < 12 {
+-		escolha := gerador.Intn(4)
+-
+-		switch escolha {
+-		case 0: // Perícia nova
+-			if len(periciasDisponiveis) == 0 {
+-				fmt.Println("Todas as perícias estão distribuídas. Escolhendo novamente.")
+-				continue
+-			}
+-			pontosXP = AdicionarNovaPericia(&periciasDisponiveis, periciasDistribuidas, pontosXP)
+-
+-		case 1: // Talento novo
+-			if len(talentosDisponiveis) == 0 {
+-				fmt.Println("Todos os talentos disponíveis já foram escolhidos. Escolhendo novamente.")
+-				continue
+-			}
+-			pontosXP = AdicionarNovoTalento(&talentosDisponiveis, talentosEscolhidos, pontosXP)
+-
+-		case 2: // Aumentar nível de perícia
+-			pontosXP = AumentarNivelPericia(periciasDistribuidas, pontosXP)
+-
+-		case 3: // Aumentar nível de talento
+-			pontosXP = AumentarNivelTalento(talentosEscolhidos, pontosXP)
+-
+-		default:
+-			fmt.Println("Escolha inválida.")
+-		}
+-	}
+-
+-	return talentosEscolhidos, periciasDistribuidas
+-}
+-
+-// Função auxiliar para adicionar uma nova Pericia
+-func AdicionarNovaPericia(periciasDisponiveis *[]string, periciasDistribuidas map[string]int, pontosXP int) int {
+-	fmt.Println("Pericia Nova!")
+-	custo := 5
+-	novaPericia := randomChoice(*periciasDisponiveis)
+-	*periciasDisponiveis = remove(*periciasDisponiveis, novaPericia)
+-	periciasDistribuidas[novaPericia] = 1
+-	return pontosXP - custo
+-}
+-
+-// Função auxiliar para adicionar um novo talento
+-func AdicionarNovoTalento(talentosDisponiveis *[]string, talentosEscolhidos map[string]Talento, pontosXP int) int {
+-	fmt.Println("Talento Novo!")
+-
+-	custo := 3
+-	novoTalento := randomChoice(*talentosDisponiveis)
+-	*talentosDisponiveis = remove(*talentosDisponiveis, novoTalento)
+-	talentosEscolhidos[novoTalento] = Talento{Nome: novoTalento, Nivel: 1}
+-	return pontosXP - custo
+-}
+-
+-// Função auxiliar para aumentar o nível de uma Pericia
+-func AumentarNivelPericia(periciasDistribuidas map[string]int, pontosXP int) int {
+-	fmt.Println("Nivel de pericia aumentado!")
+-
+-	periciasDisponiveisParaAumentar := make([]string, 0)
+-	for pericia, nivel := range periciasDistribuidas {
+-		if nivel < 3 {
+-			periciasDisponiveisParaAumentar = append(periciasDisponiveisParaAumentar, pericia)
+-		}
+-	}
+-
+-	if len(periciasDisponiveisParaAumentar) == 0 {
+-		fmt.Println("Todas as Pericias estão no nível máximo. Escolhendo novamente.")
+-		return pontosXP
+-	}
+-
+-	periciaAumentar := randomChoice(periciasDisponiveisParaAumentar)
+-	nivelPericia := periciasDistribuidas[periciaAumentar]
+-	custo := 5 * nivelPericia
+-	periciasDistribuidas[periciaAumentar]++
+-	return pontosXP - custo
+-}
+-
+-// Função auxiliar para aumentar o nível de um talento
+-func AumentarNivelTalento(talentosEscolhidos map[string]Talento, pontosXP int) int {
+-	fmt.Println("Nivel de talento aumentado!")
+-
+-	talentosDisponiveisParaAumentar := make([]string, 0)
+-	for talento, info := range talentosEscolhidos {
+-		if info.Nivel < 3 {
+-			talentosDisponiveisParaAumentar = append(talentosDisponiveisParaAumentar, talento)
+-		}
+-	}
+-
+-	if len(talentosDisponiveisParaAumentar) == 0 {
+-		fmt.Println("Todos os talentos estão no nível máximo. Escolhendo novamente.")
+-		return pontosXP
+-	}
+-
+-	talentoAumentar := randomChoice(talentosDisponiveisParaAumentar)
+-	nivelTalento := talentosEscolhidos[talentoAumentar].Nivel
+-	custo := 3 * nivelTalento
+-	talentosEscolhidos[talentoAumentar] = Talento{Nome: talentoAumentar, Nivel: nivelTalento + 1}
+-	return pontosXP - custo
+-}
+Index: modulos_Inicio/DATA_racas.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_racas.go b/modulos_Inicio/DATA_racas.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_racas.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,57 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"fmt"
+-	"io/ioutil"
+-)
+-
+-// Raca representa as informacoes de uma raca no sistema
+-type Raca struct {
+-	AtributoChave     string   `json:"atributo_chave"`
+-	TalentoAscendente string   `json:"talento_ascendente"`
+-	ProfissoesTipicas []string `json:"profissoes_tipicas"`
+-	Idades            struct {
+-		Jovem  *[2]int `json:"jovem"`
+-		Adulto [2]int  `json:"adulto"`
+-		Idoso  *[2]int `json:"idoso"`
+-	} `json:"idades"`
+-}
+-
+-// PersonagemRacas armazena todas as racas e suas infos
+-type PersonagemRacas struct {
+-	Racas     []string
+-	RacasInfo map[string]Raca
+-}
+-
+-// Função para carregar dados das raças de um arquivo JSON
+-func carregarRacas(filename string) (map[string]Raca, error) {
+-	var racas map[string]Raca
+-	data, err := ioutil.ReadFile(filename)
+-	if err != nil {
+-		return racas, err
+-	}
+-	err = json.Unmarshal(data, &racas)
+-	return racas, err
+-}
+-
+-// NewPersonagemRacas inicializa PersonagemRacas com valores carregados do arquivo JSON unificado.
+-func NewPersonagemRacas(filename string) (*PersonagemRacas, error) {
+-	if filename == "" {
+-		filename = "data/racas.json"
+-	}
+-	racas, err := carregarRacas(filename)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar raças e idades: %v", err)
+-	}
+-
+-	racasNomes := make([]string, 0, len(racas))
+-	for nome := range racas {
+-		racasNomes = append(racasNomes, nome)
+-	}
+-
+-	return &PersonagemRacas{
+-		Racas:     racasNomes,
+-		RacasInfo: racas,
+-	}, nil
+-}
+Index: modulos_Inicio/FUNCOES_atributos.go
+===================================================================
+diff --git a/modulos_Inicio/FUNCOES_atributos.go b/modulos_Inicio/FUNCOES_atributos.go
+deleted file mode 100644
+--- a/modulos_Inicio/FUNCOES_atributos.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,75 +0,0 @@
+-package main
+-
+-import (
+-	"math/rand"
+-)
+-
+-// Função para obter os atributos chave
+-func obterAtributosChave(classe string, racaInfo Raca, classes map[string]Classe) []string {
+-	atributoChaveClasse := classes[classe].AtributoChave
+-	atributoChaveRaca := racaInfo.AtributoChave
+-	atributosChave := map[string]bool{
+-		atributoChaveClasse: true,
+-		atributoChaveRaca:   true,
+-	}
+-	result := []string{}
+-	for k := range atributosChave {
+-		result = append(result, k)
+-	}
+-	return result
+-}
+-
+-// Função onde os pontos de atributo são distribuídos e o valor/nível dos atributos determinados
+-func escolherAtributos(faixaEtaria string, atributosChave []string, atributos Atributos) map[string]int {
+-	// Inicializando os atributos com valores mínimos
+-	atributosRandomizados := map[string]int{
+-		"Forca":        atributos.Forca[0],
+-		"Agilidade":    atributos.Agilidade[0],
+-		"Inteligencia": atributos.Inteligencia[0],
+-		"Empatia":      atributos.Empatia[0],
+-	}
+-
+-	// Definindo pontos disponíveis com base na faixa etária
+-	pontosDisponiveis := map[string]int{
+-		"Jovem":  15,
+-		"Adulto": 14,
+-		"Idoso":  13,
+-	}[faixaEtaria]
+-
+-	// Distribuindo 2 pontos para cada atributo
+-	for atributo := range atributosRandomizados {
+-		atributosRandomizados[atributo] = 2
+-		pontosDisponiveis -= 2
+-	}
+-
+-	// Distribuindo pontos igualmente entre os atributos chave
+-	pontosPorAtributoChave := pontosDisponiveis / len(atributosChave)
+-	for _, atributo := range atributosChave {
+-		pontosParaAdicionar := menorValor(pontosPorAtributoChave, 5-atributosRandomizados[atributo])
+-		atributosRandomizados[atributo] += pontosParaAdicionar
+-		pontosDisponiveis -= pontosParaAdicionar
+-	}
+-
+-	// Distribuindo pontos restantes de forma aleatória entre os atributos não-chave
+-	novoGeradorAleatorio()
+-	atributosNaoChave := []string{}
+-	for atributo := range atributosRandomizados {
+-		if !contemItem(atributosChave, atributo) {
+-			atributosNaoChave = append(atributosNaoChave, atributo)
+-		}
+-	}
+-
+-	for i := 0; i < pontosDisponiveis; i++ {
+-		atributo := atributosNaoChave[rand.Intn(len(atributosNaoChave))]
+-		if atributosRandomizados[atributo] < 5 {
+-			atributosRandomizados[atributo]++
+-		}
+-	}
+-	// Adicionando +1 ponto ao atributo-chave se houver apenas um
+-	if len(atributosChave) == 1 {
+-		atributoChave := atributosChave[0]
+-		atributosRandomizados[atributoChave]++
+-	}
+-
+-	return atributosRandomizados
+-}
+Index: modulos_Inicio/FICHA_coordenadas.go
+===================================================================
+diff --git a/modulos_Inicio/FICHA_coordenadas.go b/modulos_Inicio/FICHA_coordenadas.go
+deleted file mode 100644
+--- a/modulos_Inicio/FICHA_coordenadas.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,32 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-	"image"
+-)
+-
+-type Coord [2]int
+-
+-// Coordenadas tem as coordenadas do elementos da ficha do sistema RPG
+-type Coordenadas struct {
+-	CoordenadasSimples     map[string]Coord  `json:"COORDENADAS"`
+-	ArmorCoordenadas       []Coord           `json:"COORDENADAS_ARMADURA"`
+-	PlayerCoordenadas      []Coord           `json:"COORDENADAS_USER"`
+-	MestreCoordenadas      []Coord           `json:"COORDENADAS_MESTRE"`
+-	CoordenadasSimplesPag2 map[string]Coord  `json:"COORDENADAS_PAG2"`
+-	KeyMap                 map[string]string `json:"MAPA_CHAVES"`
+-}
+-
+-// NewCoordinates inicializa a estrutura Coordenadas com os valores do arquivo JSON
+-func NewCoordinates() (*Coordenadas, error) {
+-	var coords Coordenadas
+-	err := readJSON("data/coordenadas.json", &coords)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar coordenadas: %v", err)
+-	}
+-	return &coords, nil
+-}
+-
+-func convertCoordToPoint(c Coord) image.Point {
+-	return image.Point{X: c[0], Y: c[1]}
+-}
+Index: modulos_Inicio/DATA_status.go
+===================================================================
+diff --git a/modulos_Inicio/DATA_status.go b/modulos_Inicio/DATA_status.go
+deleted file mode 100644
+--- a/modulos_Inicio/DATA_status.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ /dev/null	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
+@@ -1,34 +0,0 @@
+-package main
+-
+-import (
+-	"fmt"
+-)
+-
+-// PersonagemStatus representa os stats geral do personagem, ou seja, atributos, habilidades e talentos
+-type PersonagemStatus struct {
+-	Atributos Atributos
+-	Pericias  Pericias
+-	Talentos  Talentos
+-}
+-
+-// Função para carregar dados de atributos, Pericias e talentos de arquivos JSON
+-func NewPersonagemStatus(atributosFile, periciasFile, talentosFile string) (*PersonagemStatus, error) {
+-	status := &PersonagemStatus{}
+-
+-	err := readJSON(atributosFile, &status.Atributos)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar atributos: %v", err)
+-	}
+-
+-	err = readJSON(periciasFile, &status.Pericias)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar Pericias: %v", err)
+-	}
+-
+-	err = readJSON(talentosFile, &status.Talentos)
+-	if err != nil {
+-		return nil, fmt.Errorf("erro ao carregar talentos: %v", err)
+-	}
+-
+-	return status, nil
+-}
+Index: go.sum
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>github.com/golang/snappy v0.0.1 h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=\r\ngithub.com/golang/snappy v0.0.1/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=\r\ngithub.com/klauspost/compress v1.13.6 h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQxcgc=\r\ngithub.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=\r\ngithub.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe h1:iruDEfMl2E6fbMZ9s0scYfZQ84/6SPL6zC8ACM2oIL0=\r\ngithub.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe/go.mod h1:wL8QJuTMNUDYhXwkmfOly8iTdp5TEcJFWZD2D7SIkUc=\r\ngithub.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=\r\ngithub.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=\r\ngithub.com/xdg-go/scram v1.1.2 h1:FHX5I5B4i4hKRVRBCFRxq1iQRej7WO3hhBuJf+UUySY=\r\ngithub.com/xdg-go/scram v1.1.2/go.mod h1:RT/sEzTbU5y00aCK8UOx6R7YryM0iF1N2MOmC3kKLN4=\r\ngithub.com/xdg-go/stringprep v1.0.4 h1:XLI/Ng3O1Atzq0oBs3TWm+5ZVgkq2aqdlvP9JtoZ6c8=\r\ngithub.com/xdg-go/stringprep v1.0.4/go.mod h1:mPGuuIYwz7CmR2bT9j4GbQqutWS1zV24gijq1dTyGkM=\r\ngithub.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d h1:splanxYIlg+5LfHAM6xpdFEAYOk8iySO56hMFq6uLyA=\r\ngithub.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d/go.mod h1:rHwXgn7JulP+udvsHwJoVG1YGAP6VLg4y9I5dyZdqmA=\r\ngithub.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=\r\ngo.mongodb.org/mongo-driver v1.15.0 h1:rJCKC8eEliewXjZGf0ddURtl7tTVy1TK3bfl0gkUSLc=\r\ngo.mongodb.org/mongo-driver v1.15.0/go.mod h1:Vzb0Mk/pa7e6cWw85R4F/endUC3u0U9jGcNU603k65c=\r\ngolang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=\r\ngolang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=\r\ngolang.org/x/crypto v0.17.0 h1:r8bRNjWL3GshPW3gkd+RpvzWrZAwPS49OmTGZ/uhM4k=\r\ngolang.org/x/crypto v0.17.0/go.mod h1:gCAAfMLgwOJRpTjQ2zCCt2OcSfYMTeZVSRtQlPC7Nq4=\r\ngolang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod h1:jJ57K6gSWd91VN4djpZkiMVwK6gcyfeH4XE8wZrZaV4=\r\ngolang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=\r\ngolang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=\r\ngolang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=\r\ngolang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=\r\ngolang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=\r\ngolang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=\r\ngolang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=\r\ngolang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=\r\ngolang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=\r\ngolang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=\r\ngolang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=\r\ngolang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=\r\ngolang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=\r\ngolang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=\r\ngolang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=\r\ngolang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=\r\ngolang.org/x/text v0.3.7/go.mod h1:u+2+/6zg+i71rQMx5EYifcz6MCKuco9NR6JIITiCfzQ=\r\ngolang.org/x/text v0.3.8/go.mod h1:E6s5w1FMmriuDzIBO73fBruAKo1PCIq6d2Q6DHfQ8WQ=\r\ngolang.org/x/text v0.14.0 h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=\r\ngolang.org/x/text v0.14.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=\r\ngolang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=\r\ngolang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=\r\ngolang.org/x/tools v0.1.12/go.mod h1:hNGJHUnrk76NpqgfD5Aqm5Crs+Hm0VOH/i9J2+nxYbc=\r\ngolang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/go.sum b/go.sum
+--- a/go.sum	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ b/go.sum	(date 1717981672527)
+@@ -1,3 +1,9 @@
++github.com/disintegration/imaging v1.6.2 h1:w1LecBlG2Lnp8B3jk5zSuNqd7b4DXhcjwek1ei82L+c=
++github.com/disintegration/imaging v1.6.2/go.mod h1:44/5580QXChDfwIclfc/PCwrr44amcmDAg8hxG0Ewe4=
++github.com/fogleman/gg v1.3.0 h1:/7zJX8F6AaYQc57WQCyN9cAIz+4bCJGO9B+dyW29am8=
++github.com/fogleman/gg v1.3.0/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
++github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 h1:DACJavvAHhabrF08vX0COfcOBJRhZ8lUbR+ZWIs0Y5g=
++github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
+ github.com/golang/snappy v0.0.1 h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=
+ github.com/golang/snappy v0.0.1/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
+ github.com/klauspost/compress v1.13.6 h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQxcgc=
+@@ -19,6 +25,9 @@
+ golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
+ golang.org/x/crypto v0.17.0 h1:r8bRNjWL3GshPW3gkd+RpvzWrZAwPS49OmTGZ/uhM4k=
+ golang.org/x/crypto v0.17.0/go.mod h1:gCAAfMLgwOJRpTjQ2zCCt2OcSfYMTeZVSRtQlPC7Nq4=
++golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
++golang.org/x/image v0.17.0 h1:nTRVVdajgB8zCMZVsViyzhnMKPwYeroEERRC64JuLco=
++golang.org/x/image v0.17.0/go.mod h1:4yyo5vMFQjVjUcVk4jEQcU9MGy/rulF5WvUILseCM2E=
+ golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod h1:jJ57K6gSWd91VN4djpZkiMVwK6gcyfeH4XE8wZrZaV4=
+ golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
+ golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
+@@ -27,6 +36,8 @@
+ golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
+ golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=
+ golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
++golang.org/x/sync v0.7.0 h1:YsImfSBoP9QPYL0xyKJPq0gcaJdG3rInoqxTWbfQu9M=
++golang.org/x/sync v0.7.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
+ golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+ golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+ golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+@@ -40,6 +51,8 @@
+ golang.org/x/text v0.3.8/go.mod h1:E6s5w1FMmriuDzIBO73fBruAKo1PCIq6d2Q6DHfQ8WQ=
+ golang.org/x/text v0.14.0 h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=
+ golang.org/x/text v0.14.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=
++golang.org/x/text v0.16.0 h1:a94ExnEXNtEwYLGJSIUxnWoxoRz/ZcCsV63ROupILh4=
++golang.org/x/text v0.16.0/go.mod h1:GhwF1Be+LQoKShO3cGOHzqOgRrGaYc9AvblQOmPVHnI=
+ golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+ golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
+ golang.org/x/tools v0.1.12/go.mod h1:hNGJHUnrk76NpqgfD5Aqm5Crs+Hm0VOH/i9J2+nxYbc=
+Index: modulos_Inicio/main.go
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main\r\n\r\nimport (\r\n\t\"fmt\"\r\n)\r\n\r\nfunc main() {\r\n\tracas, err := NewPersonagemRacas(\"\")\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar raças:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tclasses, err := NewPersonagemClasses(\"\")\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar classes:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tstatus, err := NewPersonagemStatus(\"data/atributos.json\", \"data/pericias.json\", \"data/talentos.json\")\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar status:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tequipamentos, err := CarregarEquipamentos()\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar equipamentos:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\ttalentos, err := carregarTalentos(\"data/talentos.json\")\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar talentos:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tatributosData, err := carregarAtributos(\"data/atributos.json\")\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao carregar dados de atributos:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tvar pontosXP int\r\n\tfmt.Print(\"Quantidade de XP: \")\r\n\tfmt.Scan(&pontosXP)\r\n\r\n\tpersonagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP)\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao gerar personagem:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tarmasEscolhidas, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)\r\n\tif err != nil {\r\n\t\tfmt.Println(\"Erro ao gerar armas:\", err)\r\n\t\treturn\r\n\t}\r\n\r\n\tgerarInfoFicha(\r\n\t\tpersonagem.Classe,\r\n\t\tpersonagem.Raca,\r\n\t\tpersonagem.AtributosChave,\r\n\t\tpersonagem.Idade,\r\n\t\tpersonagem.FaixaEtaria,\r\n\t\tpersonagem.Atributos,\r\n\t\tpersonagem.Talentos,\r\n\t\tpersonagem.Pericias,\r\n\t\tarmasEscolhidas,\r\n\t\tclasses.ClasseInfo,\r\n\t\tequipamentos,\r\n\t)\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/modulos_Inicio/main.go b/modulos_Inicio/main.go
+--- a/modulos_Inicio/main.go	(revision a013a1145e7a72f10e7bf021c46e9dea77675154)
++++ b/modulos_Inicio/main.go	(date 1717985204170)
+@@ -2,72 +2,101 @@
+ 
+ import (
+ 	"fmt"
++	"github.com/disintegration/imaging"
++	"image"
++	"image/draw"
+ )
+ 
+ func main() {
+-	racas, err := NewPersonagemRacas("")
++	// Carregar dados de raças
++	racas, err := NewPersonagemRacas("data/racas.json")
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar raças:", err)
+ 		return
+ 	}
+ 
+-	classes, err := NewPersonagemClasses("")
++	// Carregar dados de classes
++	classes, err := NewPersonagemClasses("data/classes.json")
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar classes:", err)
+ 		return
+ 	}
+ 
++	// Carregar dados de status
+ 	status, err := NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar status:", err)
+ 		return
+ 	}
+ 
++	// Carregar dados de equipamentos
+ 	equipamentos, err := CarregarEquipamentos()
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar equipamentos:", err)
+ 		return
+ 	}
+ 
++	// Carregar dados de talentos
+ 	talentos, err := carregarTalentos("data/talentos.json")
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar talentos:", err)
+ 		return
+ 	}
+ 
++	// Carregar dados de atributos
+ 	atributosData, err := carregarAtributos("data/atributos.json")
+ 	if err != nil {
+ 		fmt.Println("Erro ao carregar dados de atributos:", err)
+ 		return
+ 	}
+ 
++	// Carregar coordenadas
++	coordenadas, err := NewCoordinates()
++	if err != nil {
++		fmt.Println("Erro ao carregar coordenadas:", err)
++		return
++	}
++
++	// Definir quantidade de XP
+ 	var pontosXP int
+ 	fmt.Print("Quantidade de XP: ")
+ 	fmt.Scan(&pontosXP)
+ 
++	// Gerar personagem aleatório
+ 	personagem, err := gerarPersonagemAleatorio(racas, classes, status, &talentos, atributosData, pontosXP)
+ 	if err != nil {
+ 		fmt.Println("Erro ao gerar personagem:", err)
+ 		return
+ 	}
+ 
++	// Gerar armas para o personagem
+ 	armasEscolhidas, err := GerarArma(personagem.Classe, classes.ClasseInfo, equipamentos)
+ 	if err != nil {
+ 		fmt.Println("Erro ao gerar armas:", err)
+ 		return
+ 	}
+ 
+-	gerarInfoFicha(
+-		personagem.Classe,
+-		personagem.Raca,
+-		personagem.AtributosChave,
+-		personagem.Idade,
+-		personagem.FaixaEtaria,
+-		personagem.Atributos,
+-		personagem.Talentos,
+-		personagem.Pericias,
+-		armasEscolhidas,
+-		classes.ClasseInfo,
+-		equipamentos,
+-	)
++	// Carregar imagem da ficha
++	imagem, err := imaging.Open("data/Ficha.jpg")
++	if err != nil {
++		fmt.Println("Erro ao carregar imagem da ficha:", err)
++		return
++	}
++
++	// Converter a imagem para RGBA
++	bounds := imagem.Bounds()
++	imgRGBA := image.NewRGBA(bounds)
++	draw.Draw(imgRGBA, bounds, imagem, bounds.Min, draw.Src)
++
++	// Adicionar todas as informações do personagem na ficha
++	adicionarTodasInformacoesFicha(imgRGBA, personagem, coordenadas, armasEscolhidas, classes.ClasseInfo, equipamentos)
++
++	// Salvar a imagem da ficha preenchida
++	err = imaging.Save(imgRGBA, "FichaPreenchida.jpg")
++	if err != nil {
++		fmt.Println("Erro ao salvar a imagem da ficha preenchida:", err)
++		return
++	}
++
++	fmt.Println("Ficha do personagem gerada com sucesso!")
+ }
