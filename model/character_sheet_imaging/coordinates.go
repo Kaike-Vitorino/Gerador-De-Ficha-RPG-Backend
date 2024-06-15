@@ -21,7 +21,7 @@ type Coordenadas struct {
 // NewCoordinates inicializa a estrutura Coordenadas com os valores do arquivo JSON
 func NewCoordinates() (*Coordenadas, error) {
 	var coords Coordenadas
-	err := DataChar.ReadJSON("data/coordenadas.json", &coords)
+	err := DataChar.ReadJSON("assets/coordenadas.json", &coords)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao carregar coordenadas: %v", err)
 	}

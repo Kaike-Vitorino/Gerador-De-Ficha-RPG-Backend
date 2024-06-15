@@ -9,7 +9,7 @@ import (
 
 func EscreverTextoEmVariasCoordenadasJOGADOR(imagem *image.RGBA, coordenadas []Coord) {
 	const tamanhoDaFonte = 50
-	const caminhoDaFonte = "data/MedievalSharp.ttf"
+	const caminhoDaFonte = "assets/MedievalSharp.ttf"
 
 	texto := "Escolha do JOGADOR"
 
@@ -29,7 +29,7 @@ func EscreverTextoEmVariasCoordenadasJOGADOR(imagem *image.RGBA, coordenadas []C
 
 func EscreverTextoEmVariasCoordenadasMESTRE(imagem *image.RGBA, coordenadas []Coord) {
 	const tamanhoDaFonte = 40
-	const caminhoDaFonte = "data/MedievalSharp.ttf"
+	const caminhoDaFonte = "assets/MedievalSharp.ttf"
 
 	texto := "Escolha do MESTRE"
 
@@ -50,7 +50,7 @@ func EscreverTextoEmVariasCoordenadasMESTRE(imagem *image.RGBA, coordenadas []Co
 // Função para escrever as informações da armadura
 func EscreverArmadura(imagem *image.RGBA, texto string, coordenadas []Coord) {
 	const tamanhoDaFonte = 55
-	const caminhoDaFonte = "data/MedievalSharp.ttf"
+	const caminhoDaFonte = "assets/MedievalSharp.ttf"
 
 	dc := gg.NewContextForRGBA(imagem)
 	if err := dc.LoadFontFace(caminhoDaFonte, float64(tamanhoDaFonte)); err != nil {
@@ -69,7 +69,7 @@ func EscreverArmadura(imagem *image.RGBA, texto string, coordenadas []Coord) {
 // Função para adicionar texto na character_sheet_imaging com espacamento no Y
 func AdicionarTextoNaFichaY(imagem *image.RGBA, texto interface{}, coord Coord, espacamento int, espacamentoX int) {
 	const tamanhoDaFonte = 50
-	const caminhoDaFonte = "data/MedievalSharp.ttf"
+	const caminhoDaFonte = "assets/MedievalSharp.ttf"
 
 	dc := gg.NewContextForRGBA(imagem)
 	if err := dc.LoadFontFace(caminhoDaFonte, float64(tamanhoDaFonte)); err != nil {

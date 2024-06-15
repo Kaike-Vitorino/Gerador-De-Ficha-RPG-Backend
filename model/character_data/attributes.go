@@ -16,7 +16,7 @@ type Atributos struct {
 // Função para carregar dados de atributos de um arquivo JSON
 func CarregarAtributos(filename string) (Atributos, error) {
 	if filename == "" {
-		filename = "data/atributos.json"
+		filename = "assets/atributos.json"
 	}
 	var atributos Atributos
 	data, err := os.ReadFile(filename)

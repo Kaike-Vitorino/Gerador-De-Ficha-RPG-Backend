@@ -38,7 +38,7 @@ func carregarRacas(filename string) (map[string]Raca, error) {
 // NewPersonagemRacas inicializa PersonagemRacas com valores carregados do arquivo JSON unificado.
 func NewPersonagemRacas(filename string) (*PersonagemRacas, error) {
 	if filename == "" {
-		filename = "data/racas.json"
+		filename = "assets/racas.json"
 	}
 	racas, err := carregarRacas(filename)
 	if err != nil {

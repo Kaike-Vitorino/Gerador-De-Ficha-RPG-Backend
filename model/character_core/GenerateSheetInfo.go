@@ -10,13 +10,13 @@ import (
 // Função para Gerar e juntar as informações da character_sheet_imaging
 func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, string, string, string, string, error) {
 	// Carregar dados de raças
-	racas, err := DataChar.NewPersonagemRacas("data/racas.json")
+	racas, err := DataChar.NewPersonagemRacas("assets/racas.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar raças: %v", err)
 	}
 
 	// Carregar dados de classes
-	classesMap, talentosClasses, err := DataChar.CarregarClasses("data/classes.json")
+	classesMap, talentosClasses, err := DataChar.CarregarClasses("assets/classes.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar classes: %v", err)
 	}
@@ -26,25 +26,25 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 	}
 
 	// Carregar dados de status
-	status, err := DataChar.NewPersonagemStatus("data/atributos.json", "data/pericias.json", "data/talentos.json")
+	status, err := DataChar.NewPersonagemStatus("assets/atributos.json", "assets/pericias.json", "assets/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar status: %v", err)
 	}
 
 	// Carregar dados de talentos
-	talentos, err := DataChar.CarregarTalentos("data/talentos.json")
+	talentos, err := DataChar.CarregarTalentos("assets/talentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar talentos: %v", err)
 	}
 
 	// Carregar dados de atributos
-	atributosData, err := DataChar.CarregarAtributos("data/atributos.json")
+	atributosData, err := DataChar.CarregarAtributos("assets/atributos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar dados de atributos: %v", err)
 	}
 
 	// Carregar dados de equipamentos
-	equipamentos, err := DataChar.CarregarEquipamentos("data/equipamentos.json")
+	equipamentos, err := DataChar.CarregarEquipamentos("assets/equipamentos.json")
 	if err != nil {
 		return nil, nil, nil, "", "", "", "", fmt.Errorf("Erro ao carregar equipamentos: %v", err)
 	}

@@ -18,14 +18,14 @@ func GerarFichaCompleta() {
 	}
 
 	// Carregar dados de character_sheet_imaging
-	equipamentos, err := DataChar.CarregarEquipamentos("data/equipamentos.json")
+	equipamentos, err := DataChar.CarregarEquipamentos("assets/equipamentos.json")
 	if err != nil {
 		fmt.Println("Erro ao carregar character_sheet_imaging:", err)
 		return
 	}
 
 	// Carregar imagem da character_sheet_imaging
-	imagem, err := imaging.Open("data/Ficha.jpg")
+	imagem, err := imaging.Open("assets/Ficha.jpg")
 	if err != nil {
 		fmt.Println("Erro ao carregar imagem da character_sheet_imaging:", err)
 		return

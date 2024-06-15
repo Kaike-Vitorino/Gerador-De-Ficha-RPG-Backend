@@ -36,7 +36,7 @@ func CarregarClasses(filename string) (map[string]Classe, map[string][]string, e
 // NewPersonagemClasses inicializa PersonagemClasses com valores carregados do arquivo JSON
 func NewPersonagemClasses(filename string) (*PersonagemClasses, error) {
 	if filename == "" {
-		filename = "data/classes.json"
+		filename = "assets/classes.json"
 	}
 
 	classes, talentosClasses, err := CarregarClasses(filename)

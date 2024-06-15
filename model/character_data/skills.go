@@ -11,7 +11,7 @@ type Pericias map[string]string
 // Função para carregar dados de Pericias de um arquivo JSON
 func carregarPericias(filename string) (Pericias, error) {
 	if filename == "" {
-		filename = "data/pericias.json"
+		filename = "assets/pericias.json"
 	}
 	var pericias Pericias
 	data, err := os.ReadFile(filename)
