@@ -1,4 +1,4 @@
-module cebola.com
+module psBackKG
 
 go 1.22.3
 
