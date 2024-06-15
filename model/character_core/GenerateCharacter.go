@@ -10,7 +10,6 @@ func GerarPersonagemAleatorio(racas *DataChar.PersonagemRacas, classes *DataChar
 
 	raca, racaInfo := LogicChar.GerarRaca(racas)
 	classe := LogicChar.GerarClasse(raca, racas)
-	classe = "Rider"
 	atributosChave := LogicChar.ObterAtributosChave(classe, racaInfo, classes.ClasseInfo)
 	idade, faixaEtaria := LogicChar.CalcularIdade(raca, racas)
 	atributosDistribuidos := LogicChar.EscolherAtributos(faixaEtaria, atributosChave, atributos)
