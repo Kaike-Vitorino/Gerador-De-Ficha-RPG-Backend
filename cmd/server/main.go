@@ -1,9 +1,7 @@
 package main
 
-import (
-	MainTasks "psBackKG/main_tasks"
-)
-
 func main() {
-	MainTasks.GerarFichaCompleta()
+	//MainTasks.GerarFichaRandomCompleta()
+	//MainTasks.GerarFichaSpecificCompleta("Humano", "Guerreiro", 30)
+
 }

@@ -9,9 +9,8 @@ import (
 	DataChar "psBackKG/model/character_data"
 )
 
-func GerarFichaCompleta() {
-
-	personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, err := LogicChar.GerarInfoFicha()
+func GerarFichaRandomCompleta() {
+	personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, err := LogicChar.GerarInfoFichaRandom()
 	if err != nil {
 		fmt.Println(err)
 		return

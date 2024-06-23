@@ -8,7 +8,7 @@ import (
 )
 
 // Função para Gerar e juntar as informações da character_sheet_imaging
-func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, string, string, string, string, error) {
+func GerarInfoFichaRandom() (*DataChar.Personagem, *Sheet.Coordenadas, []string, string, string, string, string, error) {
 	// Carregar dados de raças
 	racas, err := DataChar.NewPersonagemRacas("assets/racas.json")
 	if err != nil {
@@ -89,53 +89,3 @@ func GerarInfoFicha() (*DataChar.Personagem, *Sheet.Coordenadas, []string, strin
 
 	return personagem, coordenadas, armasEscolhidas, bonusArma1, danoArma1, bonusArma2, danoArma2, nil
 }
-
-// Função auxiliar para obter as informações da arma
-func obterInfoArma(arma string, equipamentos *DataChar.Equipamentos) DataChar.Arma {
-	if infoArma, existe := equipamentos.Armas1M[arma]; existe {
-		return infoArma
-	}
-	if infoArma, existe := equipamentos.Armas2M[arma]; existe {
-		return infoArma
-	}
-	if infoArma, existe := equipamentos.ArmasDistancia1M[arma]; existe {
-		return infoArma
-	}
-	if infoArma, existe := equipamentos.ArmasDistancia2M[arma]; existe {
-		return infoArma
-	}
-	return DataChar.Arma{}
-}
-
-/*
-	// Exibir informações do character_logic gerado
-	fmt.Println("\n--- Ficha do Personagem ---")
-	fmt.Printf("Raça: %s\n", LogicChar.Raca)
-	fmt.Printf("Classe: %s\n", LogicChar.Classe)
-	fmt.Printf("=============================\n")
-	fmt.Printf("Atributo(s) Chave: %v\n", LogicChar.AtributosChave)
-	fmt.Printf("Atributos: %v\n", LogicChar.Atributos)
-	fmt.Printf("=============================\n")
-	fmt.Printf("Idade: %d\n", LogicChar.Idade)
-	fmt.Printf("Faixa Etária: %s\n", LogicChar.FaixaEtaria)
-	fmt.Printf("=============================\n")
-	fmt.Printf("Talentos:\n")
-	for talento, info := range LogicChar.Talentos {
-		fmt.Printf("%s - Nível %d\n", talento, info.Nivel)
-	}
-	fmt.Printf("=============================\n")
-	fmt.Printf("Perícias: %v\n", LogicChar.Pericias)
-	fmt.Printf("=============================\n")
-	fmt.Printf("Equipamentos: %v\n", LogicChar.Equipamentos)
-	if LogicChar.ArtefatoMusicalEscolhido != "" {
-		fmt.Printf("Artefato Musical: %s\n", LogicChar.ArtefatoMusicalEscolhido)
-	}
-	fmt.Printf("=============================\n")
-	fmt.Printf("Equipamentos Escolhidas:\n")
-	for _, arma := range LogicChar.Equipamentos {
-		if infoArma, ok := Sheet.ListaArmas[arma]; ok {
-			fmt.Printf("Arma: %s - Bônus: %s, Dano: %s\n", arma, infoArma.Bonus, infoArma.Dano)
-		}
-	}
-
-*/
