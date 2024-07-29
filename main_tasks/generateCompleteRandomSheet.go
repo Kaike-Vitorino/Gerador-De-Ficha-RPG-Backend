@@ -24,7 +24,7 @@ func GerarFichaRandomCompleta() {
 	}
 
 	// Carregar imagem da character_sheet_imaging
-	imagem, err := imaging.Open("assets/Ficha.jpg")
+	imagem, err := imaging.Open("assets/FichaM.png")
 	if err != nil {
 		fmt.Println("Erro ao carregar imagem da character_sheet_imaging:", err)
 		return

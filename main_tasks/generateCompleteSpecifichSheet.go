@@ -24,7 +24,7 @@ func GerarFichaSpecificCompleta(racaEscolhida, classeEscolhida string, idadeEsco
 	}
 
 	// Carregar imagem da ficha
-	imagem, err := imaging.Open("assets/Ficha.jpg")
+	imagem, err := imaging.Open("assets/FichaM.png")
 	if err != nil {
 		fmt.Println("Erro ao carregar imagem da ficha:", err)
 		return
